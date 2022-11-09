@@ -1,0 +1,48 @@
+Dataframe "looking":
+id - Variable fÃ¼r die Versuchsperson
+trial - Variable fÃ¼r den Trial (1-4) - Es gab vier Trials. In Trials 1 & 2 war die "ego"-Ansicht auf der linken Seite (und "mirrored" auf der rechten), in Trials 3 & 4 war die "ego"-Ansicht auf der rechten Seite.
+view - Variable fÃ¼r die jeweilige Ansicht ("ego", "mirrored") - "ego" = Beine aus der eigenen Perspektive, "mirrored" = Beine von vorne gesehen
+duration - Variable fÃ¼r die Blickzeit auf die jeweilige Ansicht in ms
+#Achtung: In diesem Datensatz fehlt die "difference"-Variable. Die kÃ¶nnt ihr euch einfach berechnen, indem ihr die Blickzeit ego-mirrored berechnet.
+
+
+Dataframe "fNIRSData":
+id - Variable fÃ¼r die Versuchsperson
+condition - Variable fÃ¼r die jeweilige Bedingung ("online", "delayed") - "online" = Video war live, "delayed" = Video war um 3s verzÃ¶gert
+channel - Variable fÃ¼r den jeweiligen Channel (1-30) - Channel 1-15 befinden sich auf der rechten GehirnhÃ¤lfte, Channel 16-30 sind das exakte Spiegelbild auf der linken GehirnhÃ¤lfte (s. ChannelsLeft_Labeled.png & ChannelsRight_Labeled.png)
+HbO - MaÃŸ fÃ¼r den Sauerstofffluss *zum* Gehirn in uMol (positive Werte bedeuten eine Aktivierung des Gehirns)
+HbR - MaÃŸ fÃ¼r den Sauerstofffluss *vom* Gehirn in uMol (negative Werte bedeuten eine Aktivierung des Gehirns)
+
+Dataframe "touch":
+category - Variable fÃ¼r die jeweilige BerÃ¼hungsart ("affectionate", "instrumental", "none", "playful", "static", "harsh", "attention", "incidental") - "affectionate" = liebevolle BerÃ¼hungen (z.B. Streicheln), "instrumental" = BerÃ¼hrungen, die einen bestimmten Zweck haben, der nicht in der BerÃ¼hrung selbst liegt (z.B. Kind umdrehen), "none" = Zeit ohne BerÃ¼hrung, "playful" - spielerische BerÃ¼hrungen (z.B. Kitzeln), "static" = BerÃ¼hrungen ohne Bewegung (z.B. Hand liegt auf Bauch des Kindes), "harsh" = BerÃ¼hrungen mit negativem Effekt (z.B. Schlagen), "attention" = BerÃ¼hrungen, um die Aufmerksamkeit des Kindes auf sich zu lenken (z.B. Anstupsen), "incidental" = BerÃ¼hrungen, die aus Versehen passieren, wÃ¤hrend die Mutter eigentlich etwas anderes machen will
+id - Variable fÃ¼r die Versuchsperson
+n_rel - Variable fÃ¼r die HÃ¤ufigkeit der BerÃ¼hrungsart in % der Interaktionszeit (um die 5 Minuten rum, aber manchmal ein paar Sekunden mehr oder weniger)
+
+Dataframe "contingency":
+id - Variable fÃ¼r die Versuchsperson
+nContingentReactionsAll - Anzahl der kontingenten Reaktionen, die in der Interaktion aufgetreten ist
+mutualGazeDuration - Zeit, in der Mutter und Kind sich angeschaut haben (nur hier wurden kontingente Reaktionen kodiert) in s
+behaviorsInfantAll - Anzahl an Signalen, die das Kind gesendet hat, auf die die Mutter hÃ¤tte reagieren kÃ¶nnen
+behaviorsCaregiverAll - Anzahl an Verhaltensweisen, die die Mutter gezeigt hat (egal ob kontingent oder nicht)
+respIndexAll - responsiveness Index (MaÃŸ fÃ¼r kontingente Verhaltensweisen - Formel s. Formeln.pdf)
+contingentRperMAll - kontingente Reaktionen pro Minute (MaÃŸ fÃ¼r kontingente Verhaltensweisen - Formel s. Formeln.pdf)
+
+Dataframe "age_sex":
+id - Variable fÃ¼r die Versuchsperson
+Geschlecht - Variable fÃ¼r Geschlecht ("m", "f") - "m" = mÃ¤nnlich, "f" = weiblich
+Age_days - Alter des Kindes in Tagen fÃ¼r die Daten looking, touch & contingency
+Age_days_fNIRS - Alter des Kindes in Tagen fÃ¼r die Daten fNIRS
+
+Dataframe "demografics" (jede Variable existiert einmal in Textform und numerisch kodiert - ich erklÃ¤re nur kurz was jede Variable bedeutet, die numerische Kodierung ergibt sich aus der Text-Variable)
+id - Variable fÃ¼r die Versuchsperson
+Surveyee - wer den Fragebogen ausgefÃ¼llt hat
+Secondary_Education_Mother - Schulform, die Mutter hÃ¶chstens besucht hat
+Tertiary_Education_Mother - weitere (hÃ¶chste) Ausbildung nach der Schule (z.B. UniversitÃ¤t oder Ausbildung) der Mutter
+Age_Mother - Alter der Mutter zum Zeitpunkt des Fragebogens (Kind war 5 Monate alt = ungefÃ¤hr Alter bei der Geburt)
+Secondary_Education_Father - Schulform, die Vater hÃ¶chstens besucht hat
+Tertiary_Education_Father - weitere (hÃ¶chste) Ausbildung nach der Schule (z.B. UniversitÃ¤t oder Ausbildung) des Vaters
+Age_Father - Alter des Vaters zum Zeitpunkt des Fragebogens (Kind war 5 Monate alt = ungefÃ¤hr Alter bei der Geburt)
+Marital_Status - Sind Eltern verheiratet, geschieden, verwitwet o.Ã¤.?
+Siblings - Gibt es Geschwister? (Da das Kind so jung war bei der Testung, sind es hier immer Ã¤ltere Geschwister)
+Primary_Language_Child - Was ist die Muttersprache des Kindes?
+Primary_Caretaker - Wer kÃ¼mmert sich hauptsÃ¤chlich um das Kind?
