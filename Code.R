@@ -1,12 +1,14 @@
+### libraries
 library(tidyverse)
 library(dplyr)
 library(magrittr)
 
+### data sets
 load('looking.RData')
 load('fNIRSData.RData')
 load('age_sex.RData')
 
-
+### create tidydata dataset
 fNIRS2 <- pivot_wider(data = fNIRSData,
                       names_from = c(condition, channel),
                       values_from = c(HbO, HbR))
