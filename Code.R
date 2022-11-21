@@ -29,3 +29,15 @@ fNIRS.online.HbRMean <- aggregate(fNIRS.online$HbR, list(fNIRS.online$channel), 
 colnames(fNIRS.online.HbRMean) <- c("channel", "HbR_mean")
 
 fNIRS.online.mean <- cbind(fNIRS.online.HbOMean, fNIRS.online.HbRMean[2])
+
+### subdaten fNIRS delayed.mean nach channel
+fNIRS.delayed <- subset(fNIRSData, condition=="delayed")
+fNIRS.delayed.HbOMean <- aggregate(fNIRS.delayed$HbO, list(fNIRS.delayed$channel), mean,
+                                  na.rm=TRUE)
+colnames(fNIRS.delayed.HbOMean) <- c("channel", "HbO_mean")
+
+fNIRS.delayed.HbRMean <- aggregate(fNIRS.delayed$HbR, list(fNIRS.delayed$channel), mean,
+                                  na.rm=TRUE)
+colnames(fNIRS.delayed.HbRMean) <- c("channel", "HbR_mean")
+
+fNIRS.delayed.mean <- cbind(fNIRS.delayed.HbOMean, fNIRS.delayed.HbRMean[2])
