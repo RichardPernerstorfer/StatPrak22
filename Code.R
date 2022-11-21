@@ -19,6 +19,41 @@ data.list <- list(fNIRS2, looking2, age_sex)
 fNIRS.looking.age_sex <- data.list1 %>%
   reduce(full_join, by = "id")
 
+### seprete delayed and online
+fNIRS.online <- subset(fNIRSData, condition=="online")
+fNIRS.delayed <-subset(fNIRSData, condition=="delayed")
+
+fNIRS2.online <- pivot_wider(data = fNIRS.online,
+                      names_from = c(condition, channel),
+                      values_from = c(HbO, HbR))
+
+fNIRS2.delayed <- pivot_wider(data = fNIRS.delayed,
+                      names_from = c(condition, channel),
+                      values_from = c(HbO, HbR))
+df.fNIRS2.online <- as.data.frame(fNIRS2.online)[, -1]
+df.fNIRS2.delayed <- as.data.frame(fNIRS2.delayed)[, -1]
+
+
+### ersetzen NA durch Mittelwert
+df.fNIRS2 <- as.data.frame(fNIRS2)[, -1]
+
+for(i in 1:ncol(df.fNIRS2)) {
+  df.fNIRS2[ , i][is.na(df.fNIRS2[ , i])] <- mean(df.fNIRS2[ , i], na.rm=TRUE)
+}
+
+for(i in 1:ncol(df.fNIRS2.online)) {
+  df.fNIRS2.online[ , i][is.na(df.fNIRS2.online[ , i])] <- mean(df.fNIRS2.online[ , i], na.rm=TRUE)
+}
+
+for(i in 1:ncol(df.fNIRS2.delayed)) {
+  df.fNIRS2.delayed[ , i][is.na(df.fNIRS2.delayed[ , i])] <- mean(df.fNIRS2.delayed[ , i], na.rm=TRUE)
+}
+
+### Korrelationsmatrix
+
+korr_tab_delayed <- cor(df.fNIRS2.delayed)
+korr_tab_online <- cor(df.fNIRS2.online)
+
 ### subdaten fNIRS online.mean nach channel
 fNIRS.online <- subset(fNIRSData, condition=="online")
 fNIRS.online.HbOMean <- aggregate(fNIRS.online$HbO, list(fNIRS.online$channel), mean,
