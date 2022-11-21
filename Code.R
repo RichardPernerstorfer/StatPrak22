@@ -18,3 +18,14 @@ looking2 <- pivot_wider(data = looking,
 data.list <- list(fNIRS2, looking2, age_sex)
 fNIRS.looking.age_sex <- data.list1 %>%
   reduce(full_join, by = "id")
+
+### subdaten fNIRS online.mean nach channel
+fNIRS.online <- subset(fNIRSData, condition=="online")
+fNIRS.online.HbOMean <- aggregate(fNIRS.online$HbO, list(fNIRS.online$channel), mean,
+                                  na.rm=TRUE)
+colnames(fNIRS.online.HbOMean) <- c("channel", "HbO_mean")
+fNIRS.online.HbRMean <- aggregate(fNIRS.online$HbR, list(fNIRS.online$channel), mean,
+                                  na.rm=TRUE)
+colnames(fNIRS.online.HbRMean) <- c("channel", "HbR_mean")
+
+fNIRS.online.mean <- cbind(fNIRS.online.HbOMean, fNIRS.online.HbRMean[2])
