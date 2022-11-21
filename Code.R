@@ -41,3 +41,7 @@ fNIRS.delayed.HbRMean <- aggregate(fNIRS.delayed$HbR, list(fNIRS.delayed$channel
 colnames(fNIRS.delayed.HbRMean) <- c("channel", "HbR_mean")
 
 fNIRS.delayed.mean <- cbind(fNIRS.delayed.HbOMean, fNIRS.delayed.HbRMean[2])
+### Mittelwert HbO/HbR einzelner channel
+channel_mean <- cbind(fNIRS.delayed.mean,fNIRS.online.mean[2:3])
+colnames(channel_mean) <- c("channel", "delayed_HbO_mean","delayed_HbR_mean",
+                            "online_HbO_mean", "online_HbR_mean")
