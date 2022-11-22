@@ -34,7 +34,7 @@ df.fNIRS2.online <- as.data.frame(fNIRS2.online)[, -1]
 df.fNIRS2.delayed <- as.data.frame(fNIRS2.delayed)[, -1]
 
 
-### ersetzen NA durch Mittelwert
+## ersetzen NA durch Mittelwert
 df.fNIRS2 <- as.data.frame(fNIRS2)[, -1]
 
 for(i in 1:ncol(df.fNIRS2)) {
@@ -49,10 +49,26 @@ for(i in 1:ncol(df.fNIRS2.delayed)) {
   df.fNIRS2.delayed[ , i][is.na(df.fNIRS2.delayed[ , i])] <- mean(df.fNIRS2.delayed[ , i], na.rm=TRUE)
 }
 
-### Korrelationsmatrix
+### Differenz delayed_online
+diff_delayed_online <- df.fNIRS2.delayed - df.fNIRS2.online
+colnames(diff_delayed_online) <- c(1:30, 1:30) #1:30(HbO), 1:30(HbR)
 
-korr_tab_delayed <- cor(df.fNIRS2.delayed)
-korr_tab_online <- cor(df.fNIRS2.online)
+
+######## Korrelationsmatrix
+
+korr_tab_delayedHbO <- cor(df.fNIRS2.delayed[1:30])
+korr_tab_onlineHbO <- cor(df.fNIRS2.online[1:30])
+
+korr_tab_delayedHbR <- cor(df.fNIRS2.delayed[31:60])
+korr_tab_onlineHbR <- cor(df.fNIRS2.online[31:60])
+
+korr_tab_diffHbO<- cor(diff_delayed_online[1:30])
+korr_tab_diffHbR <- cor(diff_delayed_online[31:60])
+
+### Korrelation plotten
+corrplot(korr_tab_delayedHbO, type = "upper", pch = 0.05)
+corrplot(korr_tab_diffHbO, method="circle", type = "upper", pch = 0.1,
+         title = "Korrelation Plot: Differenz delayed_online")
 
 ### subdaten fNIRS online.mean nach channel
 fNIRS.online <- subset(fNIRSData, condition=="online")
