@@ -96,3 +96,24 @@ fNIRS.delayed.mean <- cbind(fNIRS.delayed.HbOMean, fNIRS.delayed.HbRMean[2])
 channel_mean <- cbind(fNIRS.delayed.mean,fNIRS.online.mean[2:3])
 colnames(channel_mean) <- c("channel", "delayed_HbO_mean","delayed_HbR_mean",
                             "online_HbO_mean", "online_HbR_mean")
+
+
+# updata ab 26.11 ---------------------------------------------------------
+
+
+### eine Möglichkeit für Korrelationsanalyse ,wenn es für uns nicht geeignet ist
+### lösen wir es.
+library(Hmisc)
+library(PerformanceAnalytics)
+#wählen wir den Teildatensätze aus ,aus fNIRS2
+HBO.online <- fNIRS2[, grepl("HbO_online+", colnames(fNIRS2))]
+HBO.delayed <- fNIRS2[, grepl("HbO_delayed+", colnames(fNIRS2))]
+HBR.online <- fNIRS2[, grepl("HbR_online+", colnames(fNIRS2))]
+HBR.delayed <- fNIRS2[, grepl("HbR_delayed+", colnames(fNIRS2))]
+
+#berechen wir den korrelation und den p wert  (HBR.delayed oder online analog) 
+HBO.online.cor <- rcorr(as.matrix(HBO.online))
+#Visualisierung (HBR.delayed/online analog)
+#tipp:die Grafik kann sehr groß sein.
+chart.Correlation(HBO.online, histogram = TRUE)
+
