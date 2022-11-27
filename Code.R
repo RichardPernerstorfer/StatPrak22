@@ -2,7 +2,7 @@
 library(tidyverse)
 library(dplyr)
 library(magrittr)
-library(corrplot
+library(corrplot)
 
 ### data sets
 load('looking.RData')
