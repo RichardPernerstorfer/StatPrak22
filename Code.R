@@ -2,6 +2,7 @@
 library(tidyverse)
 library(dplyr)
 library(magrittr)
+library(corrplot
 
 ### data sets
 load('looking.RData')
@@ -16,7 +17,7 @@ looking2 <- pivot_wider(data = looking,
                         names_from = c(trial, view), 
                         values_from = duration)
 data.list <- list(fNIRS2, looking2, age_sex)
-fNIRS.looking.age_sex <- data.list1 %>%
+fNIRS.looking.age_sex <- data.list %>%
   reduce(full_join, by = "id")
 
 ### seprete fNIRS2 to delayed and online
