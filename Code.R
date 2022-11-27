@@ -19,56 +19,62 @@ data.list <- list(fNIRS2, looking2, age_sex)
 fNIRS.looking.age_sex <- data.list1 %>%
   reduce(full_join, by = "id")
 
-### seprete delayed and online
-fNIRS.online <- subset(fNIRSData, condition=="online")
-fNIRS.delayed <-subset(fNIRSData, condition=="delayed")
-
-fNIRS2.online <- pivot_wider(data = fNIRS.online,
+### seprete fNIRS2 to delayed and online
+fNIRS2.online <- as.data.frame(pivot_wider(data = subset(fNIRSData, condition == "online"),
                       names_from = c(condition, channel),
-                      values_from = c(HbO, HbR))
+                      values_from = c(HbO, HbR)))[, -1]
 
-fNIRS2.delayed <- pivot_wider(data = fNIRS.delayed,
+fNIRS2.delayed <- as.data.frame(pivot_wider(data = subset(fNIRSData, condition == "delayed"),
                       names_from = c(condition, channel),
-                      values_from = c(HbO, HbR))
-df.fNIRS2.online <- as.data.frame(fNIRS2.online)[, -1]
-df.fNIRS2.delayed <- as.data.frame(fNIRS2.delayed)[, -1]
+                      values_from = c(HbO, HbR))) [, -1]
 
 
-## ersetzen NA durch Mittelwert
-df.fNIRS2 <- as.data.frame(fNIRS2)[, -1]
-
-for(i in 1:ncol(df.fNIRS2)) {
-  df.fNIRS2[ , i][is.na(df.fNIRS2[ , i])] <- mean(df.fNIRS2[ , i], na.rm=TRUE)
+## ersetzen NA in fNIRS2.online/fNIRS2.delayed durch Mittelwert 
+for(i in 1:ncol(fNIRS2.online)) {
+  fNIRS2.online[ , i][is.na(fNIRS2.online[ , i])] <- mean(fNIRS2.online[ , i], na.rm=TRUE)
 }
 
-for(i in 1:ncol(df.fNIRS2.online)) {
-  df.fNIRS2.online[ , i][is.na(df.fNIRS2.online[ , i])] <- mean(df.fNIRS2.online[ , i], na.rm=TRUE)
-}
-
-for(i in 1:ncol(df.fNIRS2.delayed)) {
-  df.fNIRS2.delayed[ , i][is.na(df.fNIRS2.delayed[ , i])] <- mean(df.fNIRS2.delayed[ , i], na.rm=TRUE)
+for(i in 1:ncol(fNIRS2.delayed)) {
+  fNIRS2.delayed[ , i][is.na(fNIRS2.delayed[ , i])] <- mean(fNIRS2.delayed[ , i], na.rm=TRUE)
 }
 
 ### Differenz delayed_online
-diff_delayed_online <- df.fNIRS2.delayed - df.fNIRS2.online
-colnames(diff_delayed_online) <- c(1:30, 1:30) #1:30(HbO), 1:30(HbR)
+# mit betrag
+diff_delayed_online <- abs(fNIRS2.delayed - fNIRS2.online)
+colnames(diff_delayed_online) <- c(1:30, #HbO
+                                   1:30) #HbR
+
+# ohne betrag
+diff_delayed_online <- fNIRS2.delayed - fNIRS2.online
+colnames(diff_delayed_online) <- c(1:30, #HbO
+                                   1:30) #HbR
 
 
 ######## Korrelationsmatrix
-
-korr_tab_delayedHbO <- cor(df.fNIRS2.delayed[1:30])
-korr_tab_onlineHbO <- cor(df.fNIRS2.online[1:30])
-
-korr_tab_delayedHbR <- cor(df.fNIRS2.delayed[31:60])
-korr_tab_onlineHbR <- cor(df.fNIRS2.online[31:60])
-
-korr_tab_diffHbO<- cor(diff_delayed_online[1:30])
+#diff_delayed_online
+korr_tab_diffHbO <- cor(diff_delayed_online[1:30])
 korr_tab_diffHbR <- cor(diff_delayed_online[31:60])
 
+# Anzahl der starken korrelierten Paare berechnen
+length(which(korr_tab_diffHbO >= 0.5 )) - 30 
+length(which(korr_tab_diffHbR >= 0.5)) - 30
+
+length(which(korr_tab_diffHbO >= 0.6)) - 30
+length(which(korr_tab_diffHbR >= 0.6)) - 30
+
+length(which(korr_tab_diffHbO >= 0.7)) - 30
+length(which(korr_tab_diffHbR >= 0.7)) - 30
+
+
 ### Korrelation plotten
-corrplot(korr_tab_delayedHbO, type = "upper", pch = 0.05)
-corrplot(korr_tab_diffHbO, method="circle", type = "upper", pch = 0.1,
+## korr_tab_diffHbO
+corrplot_channel_diffHbO <- corrplot(korr_tab_diffHbO, method= "pie", type = "upper", pch = 0.1,
          title = "Korrelation Plot: Differenz delayed_online")
+
+## korr_tab_diffHbR
+corrplot_channel_diffHbR <- corrplot(korr_tab_diffHbR, method= "pie", type = "upper", pch = 0.1,
+                                     title = "Korrelation Plot: Differenz delayed_online")
+
 
 ### subdaten fNIRS online.mean nach channel
 fNIRS.online <- subset(fNIRSData, condition=="online")
