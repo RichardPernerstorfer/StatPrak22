@@ -3,6 +3,8 @@ library(tidyverse)
 library(dplyr)
 library(magrittr)
 library(corrplot)
+library(Hmisc)
+library(PerformanceAnalytics)
 
 ### data sets
 load('looking.RData')
@@ -105,8 +107,7 @@ colnames(channel_mean) <- c("channel", "delayed_HbO_mean","delayed_HbR_mean",
 
 ### eine Möglichkeit für Korrelationsanalyse ,wenn es für uns nicht geeignet ist
 ### lösen wir es.
-library(Hmisc)
-library(PerformanceAnalytics)
+
 #wählen wir den Teildatensätze aus ,aus fNIRS2
 HBO.online <- fNIRS2[, grepl("HbO_online+", colnames(fNIRS2))]
 HBO.delayed <- fNIRS2[, grepl("HbO_delayed+", colnames(fNIRS2))]
