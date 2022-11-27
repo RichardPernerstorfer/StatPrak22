@@ -40,11 +40,6 @@ for(i in 1:ncol(fNIRS2.delayed)) {
 }
 
 ### Differenz delayed_online
-# mit betrag
-diff_delayed_online <- abs(fNIRS2.delayed - fNIRS2.online)
-colnames(diff_delayed_online) <- c(1:30, #HbO
-                                   1:30) #HbR
-
 # ohne betrag
 diff_delayed_online <- fNIRS2.delayed - fNIRS2.online
 colnames(diff_delayed_online) <- c(1:30, #HbO
