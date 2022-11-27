@@ -73,31 +73,22 @@ corrplot_channel_diffHbO <- corrplot(korr_tab_diffHbO, method= "pie", type = "up
 corrplot_channel_diffHbR <- corrplot(korr_tab_diffHbR, method= "pie", type = "upper", pch = 0.1,
                                      title = "Korrelation Plot: Differenz delayed_online")
 
-
-### subdaten fNIRS online.mean nach channel
-fNIRS.online <- subset(fNIRSData, condition=="online")
-fNIRS.online.HbOMean <- aggregate(fNIRS.online$HbO, list(fNIRS.online$channel), mean,
-                                  na.rm=TRUE)
-colnames(fNIRS.online.HbOMean) <- c("channel", "HbO_mean")
-fNIRS.online.HbRMean <- aggregate(fNIRS.online$HbR, list(fNIRS.online$channel), mean,
-                                  na.rm=TRUE)
-colnames(fNIRS.online.HbRMean) <- c("channel", "HbR_mean")
-
-fNIRS.online.mean <- cbind(fNIRS.online.HbOMean, fNIRS.online.HbRMean[2])
-
-### subdaten fNIRS delayed.mean nach channel
-fNIRS.delayed <- subset(fNIRSData, condition=="delayed")
-fNIRS.delayed.HbOMean <- aggregate(fNIRS.delayed$HbO, list(fNIRS.delayed$channel), mean,
-                                  na.rm=TRUE)
+##### mittelwert
+HbOMean.delayed <- aggregate(subset(fNIRSData, condition=="delayed")$HbO,
+                                   list(subset(fNIRSData, condition=="delayed")$channel),
+                                   mean, na.rm=TRUE)
 colnames(fNIRS.delayed.HbOMean) <- c("channel", "HbO_mean")
 
-fNIRS.delayed.HbRMean <- aggregate(fNIRS.delayed$HbR, list(fNIRS.delayed$channel), mean,
-                                  na.rm=TRUE)
+HbRMean.delayed <- aggregate(subset(fNIRSData, condition=="delayed")$HbR,
+                                   list(subset(fNIRSData, condition=="delayed")$channel),
+                                   mean, na.rm=TRUE)
 colnames(fNIRS.delayed.HbRMean) <- c("channel", "HbR_mean")
 
 fNIRS.delayed.mean <- cbind(fNIRS.delayed.HbOMean, fNIRS.delayed.HbRMean[2])
-### Mittelwert HbO/HbR einzelner channel
-channel_mean <- cbind(fNIRS.delayed.mean,fNIRS.online.mean[2:3])
+saveRDS(fNIRS.delayed.mean, "fNIRS.delayed.mean.rds")
+
+channel_mean <- cbind(HbOMean.delayed,HbRMean.delayed, HbOMean.online, HbRMean.online)
+channel_mean <- channel_mean[-c(3, 5, 7)]
 colnames(channel_mean) <- c("channel", "delayed_HbO_mean","delayed_HbR_mean",
                             "online_HbO_mean", "online_HbR_mean")
 
