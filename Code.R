@@ -98,6 +98,14 @@ colnames(channel_mean) <- c("channel", "delayed_HbO_mean","delayed_HbR_mean",
 channel_mean$Diff_delayed_onlineHbO <- channel_mean$online_HbO_mean - channel_mean$delayed_HbO_mean
 channel_mean$Diff_delayed_onlineHbR <- channel_mean$online_HbR_mean - channel_mean$delayed_HbR_mean
 
+channel_mean$totalDiff <- (aggregate(subset(fNIRSData, condition == "online")$diff,
+          list(subset(fNIRSData, condition == "online")$channel),
+          mean, na.rm=TRUE) - aggregate(subset(fNIRSData, condition == "delayed")$diff,
+                                        list(subset(fNIRSData, condition == "delayed")$channel),
+                                        mean, na.rm=TRUE))[[2]]
+
+ggplot(channel_mean, aes(x=channel, y=totalDiff))+geom_point()
+
 
 # updata ab 26.11 ---------------------------------------------------------
 
