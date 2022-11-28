@@ -117,3 +117,20 @@ HBO.online.cor <- rcorr(as.matrix(HBO.online))
 #tipp:die Grafik kann sehr groß sein.
 chart.Correlation(HBO.online, histogram = TRUE)
 
+
+
+
+##### wilcox.test -----------------------
+fNIRSData$diff <- fNIRSData$HbO - fNIRSData$HbR
+#### testen, ob diff v. HbO & HbR von beiden Gr(online & delayed) signifikant voneinander unterscheiden
+## get p-value für jede channel
+getP <- function(x) {
+  wilcox.test(subset(fNIRSData, condition == "online" & channel == x)$diff,
+              subset(fNIRSData, condition == "delayed" & channel == x)$diff,
+              alternative = "less", paired = TRUE, conf.level = 0.9)$p.value
+}
+v <- vector(mode = "numeric", length = 30)
+for (i in 1:30) {
+  v[[i]] <- getP(i) # vektor für p-value aller 30 channels
+}
+which(v <= 0.1) #channel, von denen die beide Gruppen online-delayed signifikant voneinander unterscheiden
