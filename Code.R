@@ -190,6 +190,6 @@ fNIRS.looking.age_sex$looking_diff_mean <- rowMeans(fNIRS.looking.age_sex[163:16
 ### subdatensatz für Regression erstellen
 mydata <- fNIRS.looking.age_sex[,c(133:162,167)]
 ### Variablenselektion per boosting-Verfahren
-summary(glmboost(looking_diff_mean ~., data = mydata, mstop = 2574))
+summary(glmboost(looking_diff_mean ~., data = mydata, control = boost_control(mstop = 2574)))
 
 
