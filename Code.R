@@ -142,3 +142,48 @@ for (i in 1:30) {
   v[[i]] <- getP(i) # vektor für p-value aller 30 channels
 }
 which(v <= 0.1) #channel, von denen die beide Gruppen online-delayed signifikant voneinander unterscheiden
+
+
+####### Frage 3: Korrelation einzelner channels zu looking experiment -----------------------
+### Spalten für channel_total hinzufügen
+fNIRS.looking.age_sex$channel1_total <- (fNIRS.looking.age_sex$HbO_online_1 - fNIRS.looking.age_sex$HbR_online_1) - (fNIRS.looking.age_sex$HbO_delayed_1 - fNIRS.looking.age_sex$HbR_delayed_1)
+fNIRS.looking.age_sex$channel2_total <- (fNIRS.looking.age_sex$HbO_online_2 - fNIRS.looking.age_sex$HbR_online_2) - (fNIRS.looking.age_sex$HbO_delayed_2 - fNIRS.looking.age_sex$HbR_delayed_2)
+fNIRS.looking.age_sex$channel3_total <- (fNIRS.looking.age_sex$HbO_online_3 - fNIRS.looking.age_sex$HbR_online_3) - (fNIRS.looking.age_sex$HbO_delayed_3 - fNIRS.looking.age_sex$HbR_delayed_3)
+fNIRS.looking.age_sex$channel4_total <- (fNIRS.looking.age_sex$HbO_online_4 - fNIRS.looking.age_sex$HbR_online_4) - (fNIRS.looking.age_sex$HbO_delayed_4 - fNIRS.looking.age_sex$HbR_delayed_4)
+fNIRS.looking.age_sex$channel5_total <- (fNIRS.looking.age_sex$HbO_online_5 - fNIRS.looking.age_sex$HbR_online_5) - (fNIRS.looking.age_sex$HbO_delayed_5 - fNIRS.looking.age_sex$HbR_delayed_5)
+fNIRS.looking.age_sex$channel6_total <- (fNIRS.looking.age_sex$HbO_online_6 - fNIRS.looking.age_sex$HbR_online_6) - (fNIRS.looking.age_sex$HbO_delayed_6 - fNIRS.looking.age_sex$HbR_delayed_6)
+fNIRS.looking.age_sex$channel7_total <- (fNIRS.looking.age_sex$HbO_online_7 - fNIRS.looking.age_sex$HbR_online_7) - (fNIRS.looking.age_sex$HbO_delayed_7 - fNIRS.looking.age_sex$HbR_delayed_7)
+fNIRS.looking.age_sex$channel8_total <- (fNIRS.looking.age_sex$HbO_online_8 - fNIRS.looking.age_sex$HbR_online_8) - (fNIRS.looking.age_sex$HbO_delayed_8 - fNIRS.looking.age_sex$HbR_delayed_8)
+fNIRS.looking.age_sex$channel9_total <- (fNIRS.looking.age_sex$HbO_online_9 - fNIRS.looking.age_sex$HbR_online_9) - (fNIRS.looking.age_sex$HbO_delayed_9 - fNIRS.looking.age_sex$HbR_delayed_9)
+fNIRS.looking.age_sex$channel10_total <- (fNIRS.looking.age_sex$HbO_online_10 - fNIRS.looking.age_sex$HbR_online_10) - (fNIRS.looking.age_sex$HbO_delayed_10 - fNIRS.looking.age_sex$HbR_delayed_10)
+fNIRS.looking.age_sex$channel11_total <- (fNIRS.looking.age_sex$HbO_online_11 - fNIRS.looking.age_sex$HbR_online_11) - (fNIRS.looking.age_sex$HbO_delayed_11 - fNIRS.looking.age_sex$HbR_delayed_11)
+fNIRS.looking.age_sex$channel12_total <- (fNIRS.looking.age_sex$HbO_online_12 - fNIRS.looking.age_sex$HbR_online_12) - (fNIRS.looking.age_sex$HbO_delayed_12 - fNIRS.looking.age_sex$HbR_delayed_12)
+fNIRS.looking.age_sex$channel13_total <- (fNIRS.looking.age_sex$HbO_online_13 - fNIRS.looking.age_sex$HbR_online_13) - (fNIRS.looking.age_sex$HbO_delayed_13 - fNIRS.looking.age_sex$HbR_delayed_13)
+fNIRS.looking.age_sex$channel14_total <- (fNIRS.looking.age_sex$HbO_online_14 - fNIRS.looking.age_sex$HbR_online_14) - (fNIRS.looking.age_sex$HbO_delayed_14 - fNIRS.looking.age_sex$HbR_delayed_14)
+fNIRS.looking.age_sex$channel15_total <- (fNIRS.looking.age_sex$HbO_online_15 - fNIRS.looking.age_sex$HbR_online_15) - (fNIRS.looking.age_sex$HbO_delayed_15 - fNIRS.looking.age_sex$HbR_delayed_15)
+fNIRS.looking.age_sex$channel16_total <- (fNIRS.looking.age_sex$HbO_online_16 - fNIRS.looking.age_sex$HbR_online_16) - (fNIRS.looking.age_sex$HbO_delayed_16 - fNIRS.looking.age_sex$HbR_delayed_16)
+fNIRS.looking.age_sex$channel17_total <- (fNIRS.looking.age_sex$HbO_online_17 - fNIRS.looking.age_sex$HbR_online_17) - (fNIRS.looking.age_sex$HbO_delayed_17 - fNIRS.looking.age_sex$HbR_delayed_17)
+fNIRS.looking.age_sex$channel18_total <- (fNIRS.looking.age_sex$HbO_online_18 - fNIRS.looking.age_sex$HbR_online_18) - (fNIRS.looking.age_sex$HbO_delayed_18 - fNIRS.looking.age_sex$HbR_delayed_18)
+fNIRS.looking.age_sex$channel19_total <- (fNIRS.looking.age_sex$HbO_online_19 - fNIRS.looking.age_sex$HbR_online_19) - (fNIRS.looking.age_sex$HbO_delayed_19 - fNIRS.looking.age_sex$HbR_delayed_19)
+fNIRS.looking.age_sex$channel20_total <- (fNIRS.looking.age_sex$HbO_online_20 - fNIRS.looking.age_sex$HbR_online_20) - (fNIRS.looking.age_sex$HbO_delayed_20 - fNIRS.looking.age_sex$HbR_delayed_20)
+fNIRS.looking.age_sex$channel21_total <- (fNIRS.looking.age_sex$HbO_online_21 - fNIRS.looking.age_sex$HbR_online_21) - (fNIRS.looking.age_sex$HbO_delayed_21 - fNIRS.looking.age_sex$HbR_delayed_21)
+fNIRS.looking.age_sex$channel22_total <- (fNIRS.looking.age_sex$HbO_online_22 - fNIRS.looking.age_sex$HbR_online_22) - (fNIRS.looking.age_sex$HbO_delayed_22 - fNIRS.looking.age_sex$HbR_delayed_22)
+fNIRS.looking.age_sex$channel23_total <- (fNIRS.looking.age_sex$HbO_online_23 - fNIRS.looking.age_sex$HbR_online_23) - (fNIRS.looking.age_sex$HbO_delayed_23 - fNIRS.looking.age_sex$HbR_delayed_23)
+fNIRS.looking.age_sex$channel24_total <- (fNIRS.looking.age_sex$HbO_online_24 - fNIRS.looking.age_sex$HbR_online_24) - (fNIRS.looking.age_sex$HbO_delayed_24 - fNIRS.looking.age_sex$HbR_delayed_24)
+fNIRS.looking.age_sex$channel25_total <- (fNIRS.looking.age_sex$HbO_online_25 - fNIRS.looking.age_sex$HbR_online_25) - (fNIRS.looking.age_sex$HbO_delayed_25 - fNIRS.looking.age_sex$HbR_delayed_25)
+fNIRS.looking.age_sex$channel26_total <- (fNIRS.looking.age_sex$HbO_online_26 - fNIRS.looking.age_sex$HbR_online_26) - (fNIRS.looking.age_sex$HbO_delayed_26 - fNIRS.looking.age_sex$HbR_delayed_26)
+fNIRS.looking.age_sex$channel27_total <- (fNIRS.looking.age_sex$HbO_online_27 - fNIRS.looking.age_sex$HbR_online_27) - (fNIRS.looking.age_sex$HbO_delayed_27 - fNIRS.looking.age_sex$HbR_delayed_27)
+fNIRS.looking.age_sex$channel28_total <- (fNIRS.looking.age_sex$HbO_online_28 - fNIRS.looking.age_sex$HbR_online_28) - (fNIRS.looking.age_sex$HbO_delayed_28 - fNIRS.looking.age_sex$HbR_delayed_28)
+fNIRS.looking.age_sex$channel29_total <- (fNIRS.looking.age_sex$HbO_online_29 - fNIRS.looking.age_sex$HbR_online_29) - (fNIRS.looking.age_sex$HbO_delayed_29 - fNIRS.looking.age_sex$HbR_delayed_29)
+fNIRS.looking.age_sex$channel30_total <- (fNIRS.looking.age_sex$HbO_online_30 - fNIRS.looking.age_sex$HbR_online_30) - (fNIRS.looking.age_sex$HbO_delayed_30 - fNIRS.looking.age_sex$HbR_delayed_30)
+
+
+### Spalten für ego - mirrored von looking experiment hinzufügen
+fNIRS.looking.age_sex$looking_diff_1 <- fNIRS.looking.age_sex$`1_ego` - fNIRS.looking.age_sex$`1_mirrored`
+fNIRS.looking.age_sex$looking_diff_2 <- fNIRS.looking.age_sex$`2_ego` - fNIRS.looking.age_sex$`2_mirrored`
+fNIRS.looking.age_sex$looking_diff_3 <- fNIRS.looking.age_sex$`3_ego` - fNIRS.looking.age_sex$`3_mirrored`
+fNIRS.looking.age_sex$looking_diff_4 <- fNIRS.looking.age_sex$`4_ego` - fNIRS.looking.age_sex$`4_mirrored`
+### Spalten für looking_diff_mean hinzufügen
+fNIRS.looking.age_sex$looking_diff_mean <- rowMeans(fNIRS.looking.age_sex[163:166], na.rm = TRUE)
+
+
