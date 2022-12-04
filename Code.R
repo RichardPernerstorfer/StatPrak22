@@ -187,5 +187,9 @@ fNIRS.looking.age_sex$looking_diff_3 <- fNIRS.looking.age_sex$`3_ego` - fNIRS.lo
 fNIRS.looking.age_sex$looking_diff_4 <- fNIRS.looking.age_sex$`4_ego` - fNIRS.looking.age_sex$`4_mirrored`
 ### Spalten für looking_diff_mean hinzufügen
 fNIRS.looking.age_sex$looking_diff_mean <- rowMeans(fNIRS.looking.age_sex[163:166], na.rm = TRUE)
+### subdatensatz für Regression erstellen
+mydata <- fNIRS.looking.age_sex[,c(133:162,167)]
+### Variablenselektion per boosting-Verfahren
+summary(glmboost(looking_diff_mean ~., data = mydata, mstop = 2574))
 
 
