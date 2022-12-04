@@ -5,6 +5,7 @@ library(magrittr)
 library(corrplot)
 library(Hmisc)
 library(PerformanceAnalytics)
+library(mboost)
 
 ### data sets
 load('looking.RData')
@@ -74,6 +75,7 @@ corrplot_channel_diffHbR <- corrplot(korr_tab_diffHbR, method= "pie", type = "up
                                      title = "Korrelation Plot: Differenz delayed_online")
 
 #### mittelwert/Differenz einzelner channel
+fNIRSData$diff <- fNIRSData$HbO - fNIRSData$HbR
 HbOMean.online <- aggregate(subset(fNIRSData, condition =="online")$HbO,
                                   list(subset(fNIRSData, condition=="online")$channel),
                                   mean, na.rm=TRUE)
@@ -129,7 +131,7 @@ chart.Correlation(HBO.online, histogram = TRUE)
 
 
 ##### wilcox.test -----------------------
-fNIRSData$diff <- fNIRSData$HbO - fNIRSData$HbR
+
 #### testen, ob diff v. HbO & HbR von beiden Gr(online & delayed) signifikant voneinander unterscheiden
 ## get p-value für jede channel
 getP <- function(x) {
