@@ -187,9 +187,78 @@ fNIRS.looking.age_sex$looking_diff_3 <- fNIRS.looking.age_sex$`3_ego` - fNIRS.lo
 fNIRS.looking.age_sex$looking_diff_4 <- fNIRS.looking.age_sex$`4_ego` - fNIRS.looking.age_sex$`4_mirrored`
 ### Spalten für looking_diff_mean hinzufügen
 fNIRS.looking.age_sex$looking_diff_mean <- rowMeans(fNIRS.looking.age_sex[163:166], na.rm = TRUE)
+
 ### subdatensatz für Regression erstellen
-mydata <- fNIRS.looking.age_sex[,c(133:162,167)]
+mydata <- fNIRS.looking.age_sex[1:53,c(133:162,167)]
+## ersetzen Na durch Mittelwert
+for(i in 1:ncol(mydata)) {
+  mydata[ , i][is.na(mydata[ , i])] <- mean(mydata[[i]], na.rm=TRUE)
+}
+
+### plot der Verteilung des Merkmals looking_diff_mean
+hist(fNIRS.looking.age_sex$looking_diff_mean, freq =FALSE,
+     main = "Verteilung des Merkmals looking_diff_mean",
+     ylab = "Dichte", xlab = "looking_diff_mean")
+lines(density(fNIRS.looking.age_sex$looking_diff_mean, na.rm = TRUE), col= "darkblue")
+
+ggplot(data = fNIRS.looking.age_sex, aes(looking_diff_mean)) +
+  geom_histogram()
+
+
 ### Variablenselektion per boosting-Verfahren
-summary(glmboost(looking_diff_mean ~., data = mydata, control = boost_control(mstop = 2574)))
+# Modell mit nu = 0.05:
+set.seed(123)
+model_0.05 <- glmboost(looking_diff_mean ~ ., data = mydata,
+                       control = boost_control(mstop = 2000, nu = 0.05))
+cv_0.05 <- cvrisk(object = model_0.05,
+                  folds = cv(weights = model.weights(model_0.05),
+                             type = "kfold"))
+mstop(cv_0.05)
+mean(cv_0.05[, mstop(cv_0.05) + 1])
+
+# Modell mit nu = 0.05:
+set.seed(123)
+model_0.1 <- glmboost(looking_diff_mean ~ ., data = mydata,
+                       control = boost_control(mstop = 2000, nu = 0.1))
+cv_0.1 <- cvrisk(object = model_0.1,
+                  folds = cv(weights = model.weights(model_0.1),
+                             type = "kfold"))
+mstop(cv_0.1)
+mean(cv_0.1[, mstop(cv_0.1) + 1])
+
+# Modell mit nu = 0.2:
+set.seed(123)
+model_0.2 <- glmboost(looking_diff_mean ~ ., data = mydata,
+                      control = boost_control(mstop = 2000, nu = 0.2))
+cv_0.2<- cvrisk(object = model_0.2,
+                 folds = cv(weights = model.weights(model_0.2),
+                            type = "kfold"))
+mstop(cv_0.2)
+mean(cv_0.2[, mstop(cv_0.2) + 1])
+
+##  Der niedrigste MSE  wird für das Modell mit den Parametern mstop = 22 
+##  und ν = 0.2 erreicht.
+
+model_boosting_opt <- glmboost(looking_diff_mean ~., data = mydata,
+                           control = boost_control(mstop = 22, nu = 0.2))
+summary(model_boosting_opt)
+
+plot(x = model_boosting_opt, main = "Koeffizientenpfade")
+
+
+## glm
+model_all <- glm(looking_diff_mean ~ ., family = gaussian(), data = mydata)
+summary(model_all)
+
+model_boost <- glm(looking_diff_mean ~ channel2_total + channel18_total+
+                channel1_total + channel13_total + channel23_total + channel17_total +
+                channel24_total + channel27_total,
+             family = gaussian, data = mydata)
+summary(model_boost)
+
+plot(allEffects(model_boost))
+
+
+avPlots(model_boost)
 
 
