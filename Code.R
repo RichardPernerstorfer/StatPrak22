@@ -6,6 +6,7 @@ library(corrplot)
 library(Hmisc)
 library(PerformanceAnalytics)
 library(mboost)
+library(ggplot2)
 
 ### data sets
 load('looking.RData')
@@ -262,3 +263,63 @@ plot(allEffects(model_boost))
 avPlots(model_boost)
 
 
+
+# update ab 08.12.2022 -------------------------------------------------------
+
+
+# Heatmap -----------------------------------------------------------------
+
+### dies ist eine Heatmap ,die den HbO-Wert verschiedenen channels zeigt,je
+### groesser der Wert, desto mehr rot die Farbe.Aber der Effekt ist nicht
+### sehr intuitiv , so standby.
+ggplot(fNIRSData[which(fNIRSData$condition == "online"),]) +
+  geom_raster(mapping = aes(x = channel, y = id, fill = HbO)) +
+  scale_fill_gradient(low = "white", high = "red") +
+  ggtitle("HbO-online")
+
+
+# Histogramm fuer Gruppierung ---------------------------------------------
+
+### Diese Funktion zaehlt die Werte ueber(bei HbO) oder unter(bei HbR) dem
+### eingestellten Wert(oft 0, es koennen auch strengere Anforderungen
+### (ueber 0) umgesetzt werden) in den Daten und zeigt sie mit Histogramm an.
+### signifikanzniveau kann man frei(oder 0.05) setzen, es wird in einer Linie
+### ausgedrueckt.
+anzahlaktiv.HbO <- function(data, begrenz, signifikanzniveau){
+  bars <- sapply(data, function(x) length(which(x > begrenz)))
+  value <- bars 
+  names(value) <- NULL
+  anzahl <- data.frame(x = names(bars), y = value)
+  ggplot(anzahl) +
+    geom_col(aes(x = reorder(x, y), y = y)) +
+    ggtitle(
+      sprintf("Anzahl aktiv HbO mit begrenz %s und signifikanzniveau %s",
+              begrenz,
+              signifikanzniveau)) +
+    geom_hline(aes(yintercept = (1-signifikanzniveau)*nrow(anzahl)))+
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    ylab("Anzahl aktiv") +
+    xlab("Channel")
+}
+
+anzahlaktiv.HbR <- function(data, signifikanzniveau){
+  bars <- sapply(data, function(x) length(which(x < 0)))
+  value <- bars 
+  names(value) <- NULL
+  anzahl <- data.frame(x = names(bars), y = value)
+  ggplot(anzahl) +
+    geom_col(aes(x = reorder(x, y), y = y)) +
+    ggtitle(
+      sprintf("Anzahl aktiv HbR mit signifikanzniveau %s",
+              signifikanzniveau)) +
+    geom_hline(aes(yintercept = (1-signifikanzniveau)*nrow(anzahl)))+
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    ylab("Anzahl aktiv") +
+    xlab("Channel")
+}
+
+### vier Bilder
+anzahlaktiv.HbO(HBO.online, 0, 0.05) 
+anzahlaktiv.HbO(HBO.delayed, 0, 0.05)
+anzahlaktiv.HbR(HBR.online, 0.05)
+anzahlaktiv.HbR(HBR.delayed, 0.05)
