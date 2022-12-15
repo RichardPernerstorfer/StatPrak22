@@ -68,12 +68,12 @@ length(which(korr_tab_diffHbR >= 0.7)) - 30
 
 ### Korrelation plotten
 ## korr_tab_diffHbO
-corrplot_channel_diffHbO <- corrplot(korr_tab_diffHbO, method= "pie", type = "upper", pch = 0.1,
-         title = "Korrelation Plot: Differenz delayed_online")
+corrplot_channel_diffHbO <- corrplot(korr_tab_diffHbO, type = "upper",
+         title = "Korrelation Plot von HbO", mar=c(1, 1, 1, 1), tl.cex=0.5)
 
 ## korr_tab_diffHbR
-corrplot_channel_diffHbR <- corrplot(korr_tab_diffHbR, method= "pie", type = "upper", pch = 0.1,
-                                     title = "Korrelation Plot: Differenz delayed_online")
+corrplot_channel_diffHbR <- corrplot(korr_tab_diffHbR, type = "upper", title = "Korrelation Plot von HbR",
+                                     mar=c(1, 1, 1, 1), tl.cex=0.5)
 
 #### mittelwert/Differenz einzelner channel
 fNIRSData$diff <- fNIRSData$HbO - fNIRSData$HbR
