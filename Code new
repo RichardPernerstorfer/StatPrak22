@@ -9,6 +9,8 @@ library(car)
 library(effects)
 require(nnet)
 library(ggstatsplot)
+library(MASS)
+
 ### data sets
 load('looking.RData')
 load('fNIRSData.RData')
