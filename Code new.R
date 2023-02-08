@@ -312,3 +312,6 @@ ggbetweenstats(fNIRS.online, x = looking_group, y=diff_HbO,
                plot.type = "box", type = "parametric", var.equal = FALSE, bf.message = FALSE)
 
 ggplot(fNIRS.online, aes(x=diff_HbO, fill=looking_group)) + geom_density(alpha=0.5)
+
+### Korrelationstest zwischen looking_diff_sum und mu
+ cor.test(fNIRS.looking.age_sex$looking_diff_sum, fNIRS.looking.age_sex$mu)
