@@ -84,8 +84,8 @@ for(i in 1:ncol(mydata)) {
 
 ### schau wie das Variable looking_diff_sum verteilt
 hist(mydata$looking_diff_sum, freq =FALSE,
-     main = "Verteilung des Merkmals looking_diff_mean",
-     ylab = "Dichte", xlab = "looking_diff_sum")
+     main = "Verteilung des Merkmals looking_diff_sum",
+     ylab = "Dichte", xlab = "Summierte Differenz zwischen Abläufen im looking-Experiment (ms)")
 lines(density(fNIRS.looking.age_sex$looking_diff_sum, na.rm = TRUE), col= "darkblue")
 ## looking_diff_sum annährend normalverteilt
 
@@ -139,6 +139,7 @@ summary(model_boosting_opt)
 model_boosting_opt2 <- glmboost(looking_diff_sum ~., data = mydata,
                                 control = boost_control(mstop = 2000, nu = 0.2))
 summary(model_boosting_opt2)
+par(mar = c(5,5,5,10))
 plot(x = model_boosting_opt, main = "Koeffizientenpfade")
 
 model_boost <- glm(looking_diff_sum ~ channel1_diff + channel23_diff +
