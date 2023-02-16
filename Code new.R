@@ -78,7 +78,19 @@ fNIRS.looking.age_sex$looking_diff_sum <- rowSums(fNIRS.looking.age_sex[163:166]
 ### subdatensatz für Regression erstellen
 
 mydata <- fNIRS.looking.age_sex[ -c(6, 17,18),c(133:162,167)]
-
+###regression imputation
+detregdata <- complete(mice(mydata, m = 1, method = "norm.predict"))
+stochregdata1 <- complete(mice(mydata, m = 1, method = "norm.nob"))
+stochregdata2 <- complete(mice(mydata, m = 1, method = "norm.nob"))
+stochregdata3 <- complete(mice(mydata, m = 1, method = "norm.nob"))
+stochregdata4 <- complete(mice(mydata, m = 1, method = "norm.nob"))
+stochregdata5 <- complete(mice(mydata, m = 1, method = "norm.nob"))
+stochregdata6 <- complete(mice(mydata, m = 1, method = "norm.nob"))
+stochregdata7 <- complete(mice(mydata, m = 1, method = "norm.nob"))
+stochregdata8 <- complete(mice(mydata, m = 1, method = "norm.nob"))
+stochregdata9 <- complete(mice(mydata, m = 1, method = "norm.nob"))
+stochregdata10 <- complete(mice(mydata, m = 1, method = "norm.nob"))
+###mean imputation
 for(i in 1:ncol(mydata)) {
   mydata[ ,i][is.na(mydata[ , i])] <- mean(mydata[[i]], na.rm=TRUE)
 }
