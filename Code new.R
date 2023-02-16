@@ -10,6 +10,7 @@ library(effects)
 require(nnet)
 library(ggstatsplot)
 library(MASS)
+library(mice)
 
 ### data sets
 load('looking.RData')
