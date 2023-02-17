@@ -12,6 +12,8 @@ library(ggstatsplot)
 library(MASS)
 library(mice)
 library(clustree)
+library(factoextra)
+library(NbClust)
 
 ### data sets
 load('looking.RData')
@@ -114,6 +116,18 @@ stochregdata10 <- complete(mice(mydata, m = 1, method = "norm.nob"))
 for(i in 1:ncol(mydata)) {
   mydata[ ,i][is.na(mydata[ , i])] <- mean(mydata[[i]], na.rm=TRUE)
 }
+
+##New HbO data for Cluster
+grouping_data_new=grouping_data[,-1]
+##Cluster Optimierung
+fviz_nbclust(grouping_data_new, kmeans, method = "wss", k.max = 40) + theme_minimal() + ggtitle("Within Sum of Square Method")
+fviz_nbclust(grouping_data_new, kmeans, method = "silhouette", k.max = 40) + theme_minimal() + ggtitle("the Elbow Method")
+
+##Cluster plotten
+km.res <- kmeans(grouping_data_new, 4, nstart = 25)
+fviz_cluster(km.res, data = grouping_data_new)
+
+
 
 ### schau wie das Variable looking_diff_sum verteilt
 hist(mydata$looking_diff_sum, freq =FALSE,
