@@ -11,6 +11,7 @@ require(nnet)
 library(ggstatsplot)
 library(MASS)
 library(mice)
+library(clustree)
 
 ### data sets
 load('looking.RData')
@@ -73,6 +74,25 @@ fNIRS.looking.age_sex$looking_diff_4 <- fNIRS.looking.age_sex$`4_ego` - fNIRS.lo
 
 ### Spalten für looking_diff_sum hinzufügen
 fNIRS.looking.age_sex$looking_diff_sum <- rowSums(fNIRS.looking.age_sex[163:166], na.rm = TRUE)
+
+### Dendrogram erstellen
+Delayed_data <- fNIRS.looking.age_sex[, c(2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60)]
+Online_data <- fNIRS.looking.age_sex[, c(3,5,7,9,11,13,15,17,19,21,23,25, 27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57,59,61)]
+Online_data <- complete(mice(Online_data, m = 1, method ="norm.nob"))
+Delayed_data <- complete(mice(Delayed_data, m = 1, method ="norm.nob"))
+grouping_data <- cbind(fNIRS.looking.age_sex[,1], Online_data, Delayed_data)
+tmp <- NULL
+for (k in 1:11){
+  tmp[k] <- kmeans(grouping_data[,2:61], k, nstart = 30)
+}
+df <- data.frame(tmp)
+colnames(df) <- seq(1:11)
+colnames(df) <- paste0("k",colnames(df))
+df.pca <- prcomp(df, center = TRUE, scale. = FALSE)
+ind.coord <- df.pca$x
+ind.coord <- ind.coord[,1:2]
+df <- cbind(as.data.frame(df), as.data.frame(ind.coord))
+clustree(df, prefix = "k")
 
 #### Regression zw. looking_diff_sum und 30 channels
 ### subdatensatz für Regression erstellen
