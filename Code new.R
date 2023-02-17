@@ -119,13 +119,18 @@ for(i in 1:ncol(mydata)) {
 
 ##New HbO data for Cluster
 grouping_data_new=grouping_data[,-1]
+
 ##Cluster Optimierung
 fviz_nbclust(grouping_data_new, kmeans, method = "wss", k.max = 40) + theme_minimal() + ggtitle("Within Sum of Square Method")
 fviz_nbclust(grouping_data_new, kmeans, method = "silhouette", k.max = 40) + theme_minimal() + ggtitle("the Elbow Method")
 
 ##Cluster plotten
-km.res <- kmeans(grouping_data_new, 4, nstart = 25)
+km.res <- kmeans(grouping_data_new, 2, nstart = 25)
 fviz_cluster(km.res, data = grouping_data_new)
+
+##Group adding
+km.res$cluster
+grouping_data_new=transform(grouping_data_new,group=km.res$cluster)
 
 
 
