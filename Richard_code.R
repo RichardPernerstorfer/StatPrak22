@@ -319,7 +319,7 @@ add_all_groups <- function(data, n, m){
 }
 
 ### Cluster plotten (n = Anzahl der Cluster)
-cluster_plot <- function(data){
+cluster_plot <- function(data, n){
   grouping_data_new <- data[,2:121]
   km.res <- kmeans(grouping_data_new, n, nstart = 25)
   fviz_cluster(km.res, data = grouping_data_new)
