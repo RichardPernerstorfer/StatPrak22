@@ -32,7 +32,8 @@ fNIRS.looking.age_sex <- data.list %>%
   reduce(full_join, by = "id")
 
 ### reduce data set to those we have both experiments of
-fNIRS.looking.age_sex <- fNIRS.looking.age_sex[1:53, ]
+fNIRS.looking.age_sex <- fNIRS.looking.age_sex[-c(17,18), ]
+fNIRS.looking.age_sex <- fNIRS.looking.age_sex[1:51, ]
 
 ### NA imputation
 ## create subsets of the data
@@ -40,6 +41,10 @@ HbO_delayed_data <- dplyr::select(fNIRS.looking.age_sex, contains("HbO_delayed")
 HbO_online_data <- dplyr::select(fNIRS.looking.age_sex, contains("HbO_online"))
 HbR_delayed_data <- dplyr::select(fNIRS.looking.age_sex, contains("HbR_delayed"))
 HbR_online_data <- dplyr::select(fNIRS.looking.age_sex, contains("HbR_online"))
+imp_looking2 <- looking2
+colnames(imp_looking2) <- c("id", "ego1", "mirrored1", "ego2", "mirrored2", "ego3", "mirrored3", "ego4", "mirrored4")
+imp_looking2 <- complete(mice(imp_looking2, m = 1, method = "cart"))
+colnames(imp_looking2) <- colnames(looking2)
 
 ## create new data set 10 times with the same imputation method
 
@@ -48,10 +53,10 @@ imp_HbO_delayed <- complete(mice(HbO_delayed_data, m = 1, method = "norm.nob"))
 imp_HbR_online <- complete(mice(HbR_online_data, m = 1, method = "norm.nob"))
 imp_HbR_delayed <- complete(mice(HbR_delayed_data, m = 1, method = "norm.nob"))
 imp_Data <- merge(merge(merge(imp_HbO_online, imp_HbO_delayed), imp_HbR_online), imp_HbR_delayed)
-data.list <- list(imp_Data, looking2, age_sex)
+data.list <- list(imp_Data, imp_looking2, age_sex)
 imp_1 <- data.list %>%
   reduce(full_join, by = "id")
-imp_1 <- imp_1[1:53, ]
+imp_1 <- imp_1[1:51, ]
 rm(imp_HbO_online, imp_HbO_delayed, imp_HbR_online, imp_HbR_delayed, imp_Data)
 
 imp_HbO_online <- complete(mice(HbO_online_data, m = 1, method = "norm.nob"))
@@ -59,10 +64,10 @@ imp_HbO_delayed <- complete(mice(HbO_delayed_data, m = 1, method = "norm.nob"))
 imp_HbR_online <- complete(mice(HbR_online_data, m = 1, method = "norm.nob"))
 imp_HbR_delayed <- complete(mice(HbR_delayed_data, m = 1, method = "norm.nob"))
 imp_Data <- merge(merge(merge(imp_HbO_online, imp_HbO_delayed), imp_HbR_online), imp_HbR_delayed)
-data.list <- list(imp_Data, looking2, age_sex)
+data.list <- list(imp_Data, imp_looking2, age_sex)
 imp_2 <- data.list %>%
   reduce(full_join, by = "id")
-imp_2 <- imp_2[1:53, ]
+imp_2 <- imp_2[1:51, ]
 rm(imp_HbO_online, imp_HbO_delayed, imp_HbR_online, imp_HbR_delayed, imp_Data)
 
 imp_HbO_online <- complete(mice(HbO_online_data, m = 1, method = "norm.nob"))
@@ -70,10 +75,10 @@ imp_HbO_delayed <- complete(mice(HbO_delayed_data, m = 1, method = "norm.nob"))
 imp_HbR_online <- complete(mice(HbR_online_data, m = 1, method = "norm.nob"))
 imp_HbR_delayed <- complete(mice(HbR_delayed_data, m = 1, method = "norm.nob"))
 imp_Data <- merge(merge(merge(imp_HbO_online, imp_HbO_delayed), imp_HbR_online), imp_HbR_delayed)
-data.list <- list(imp_Data, looking2, age_sex)
+data.list <- list(imp_Data, imp_looking2, age_sex)
 imp_3 <- data.list %>%
   reduce(full_join, by = "id")
-imp_3 <- imp_3[1:53, ]
+imp_3 <- imp_3[1:51, ]
 rm(imp_HbO_online, imp_HbO_delayed, imp_HbR_online, imp_HbR_delayed, imp_Data)
 
 imp_HbO_online <- complete(mice(HbO_online_data, m = 1, method = "norm.nob"))
@@ -81,10 +86,10 @@ imp_HbO_delayed <- complete(mice(HbO_delayed_data, m = 1, method = "norm.nob"))
 imp_HbR_online <- complete(mice(HbR_online_data, m = 1, method = "norm.nob"))
 imp_HbR_delayed <- complete(mice(HbR_delayed_data, m = 1, method = "norm.nob"))
 imp_Data <- merge(merge(merge(imp_HbO_online, imp_HbO_delayed), imp_HbR_online), imp_HbR_delayed)
-data.list <- list(imp_Data, looking2, age_sex)
+data.list <- list(imp_Data, imp_looking2, age_sex)
 imp_4 <- data.list %>%
   reduce(full_join, by = "id")
-imp_4 <- imp_4[1:53, ]
+imp_4 <- imp_4[1:51, ]
 rm(imp_HbO_online, imp_HbO_delayed, imp_HbR_online, imp_HbR_delayed, imp_Data)
 
 imp_HbO_online <- complete(mice(HbO_online_data, m = 1, method = "norm.nob"))
@@ -92,10 +97,10 @@ imp_HbO_delayed <- complete(mice(HbO_delayed_data, m = 1, method = "norm.nob"))
 imp_HbR_online <- complete(mice(HbR_online_data, m = 1, method = "norm.nob"))
 imp_HbR_delayed <- complete(mice(HbR_delayed_data, m = 1, method = "norm.nob"))
 imp_Data <- merge(merge(merge(imp_HbO_online, imp_HbO_delayed), imp_HbR_online), imp_HbR_delayed)
-data.list <- list(imp_Data, looking2, age_sex)
+data.list <- list(imp_Data, imp_looking2, age_sex)
 imp_5 <- data.list %>%
   reduce(full_join, by = "id")
-imp_5 <- imp_5[1:53, ]
+imp_5 <- imp_5[1:51, ]
 rm(imp_HbO_online, imp_HbO_delayed, imp_HbR_online, imp_HbR_delayed, imp_Data)
 
 imp_HbO_online <- complete(mice(HbO_online_data, m = 1, method = "norm.nob"))
@@ -103,10 +108,10 @@ imp_HbO_delayed <- complete(mice(HbO_delayed_data, m = 1, method = "norm.nob"))
 imp_HbR_online <- complete(mice(HbR_online_data, m = 1, method = "norm.nob"))
 imp_HbR_delayed <- complete(mice(HbR_delayed_data, m = 1, method = "norm.nob"))
 imp_Data <- merge(merge(merge(imp_HbO_online, imp_HbO_delayed), imp_HbR_online), imp_HbR_delayed)
-data.list <- list(imp_Data, looking2, age_sex)
+data.list <- list(imp_Data, imp_looking2, age_sex)
 imp_6 <- data.list %>%
   reduce(full_join, by = "id")
-imp_6 <- imp_6[1:53, ]
+imp_6 <- imp_6[1:51, ]
 rm(imp_HbO_online, imp_HbO_delayed, imp_HbR_online, imp_HbR_delayed, imp_Data)
 
 imp_HbO_online <- complete(mice(HbO_online_data, m = 1, method = "norm.nob"))
@@ -114,10 +119,9 @@ imp_HbO_delayed <- complete(mice(HbO_delayed_data, m = 1, method = "norm.nob"))
 imp_HbR_online <- complete(mice(HbR_online_data, m = 1, method = "norm.nob"))
 imp_HbR_delayed <- complete(mice(HbR_delayed_data, m = 1, method = "norm.nob"))
 imp_Data <- merge(merge(merge(imp_HbO_online, imp_HbO_delayed), imp_HbR_online), imp_HbR_delayed)
-data.list <- list(imp_Data, looking2, age_sex)
 imp_7 <- data.list %>%
   reduce(full_join, by = "id")
-imp_7 <- imp_7[1:53, ]
+imp_7 <- imp_7[1:51, ]
 rm(imp_HbO_online, imp_HbO_delayed, imp_HbR_online, imp_HbR_delayed, imp_Data)
 
 imp_HbO_online <- complete(mice(HbO_online_data, m = 1, method = "norm.nob"))
@@ -125,10 +129,10 @@ imp_HbO_delayed <- complete(mice(HbO_delayed_data, m = 1, method = "norm.nob"))
 imp_HbR_online <- complete(mice(HbR_online_data, m = 1, method = "norm.nob"))
 imp_HbR_delayed <- complete(mice(HbR_delayed_data, m = 1, method = "norm.nob"))
 imp_Data <- merge(merge(merge(imp_HbO_online, imp_HbO_delayed), imp_HbR_online), imp_HbR_delayed)
-data.list <- list(imp_Data, looking2, age_sex)
+data.list <- list(imp_Data, imp_looking2, age_sex)
 imp_8 <- data.list %>%
   reduce(full_join, by = "id")
-imp_8 <- imp_8[1:53, ]
+imp_8 <- imp_8[1:51, ]
 rm(imp_HbO_online, imp_HbO_delayed, imp_HbR_online, imp_HbR_delayed, imp_Data)
 
 imp_HbO_online <- complete(mice(HbO_online_data, m = 1, method = "norm.nob"))
@@ -136,10 +140,10 @@ imp_HbO_delayed <- complete(mice(HbO_delayed_data, m = 1, method = "norm.nob"))
 imp_HbR_online <- complete(mice(HbR_online_data, m = 1, method = "norm.nob"))
 imp_HbR_delayed <- complete(mice(HbR_delayed_data, m = 1, method = "norm.nob"))
 imp_Data <- merge(merge(merge(imp_HbO_online, imp_HbO_delayed), imp_HbR_online), imp_HbR_delayed)
-data.list <- list(imp_Data, looking2, age_sex)
+data.list <- list(imp_Data, imp_looking2, age_sex)
 imp_9 <- data.list %>%
   reduce(full_join, by = "id")
-imp_9 <- imp_9[1:53, ]
+imp_9 <- imp_9[1:51, ]
 rm(imp_HbO_online, imp_HbO_delayed, imp_HbR_online, imp_HbR_delayed, imp_Data)
 
 imp_HbO_online <- complete(mice(HbO_online_data, m = 1, method = "norm.nob"))
@@ -147,10 +151,10 @@ imp_HbO_delayed <- complete(mice(HbO_delayed_data, m = 1, method = "norm.nob"))
 imp_HbR_online <- complete(mice(HbR_online_data, m = 1, method = "norm.nob"))
 imp_HbR_delayed <- complete(mice(HbR_delayed_data, m = 1, method = "norm.nob"))
 imp_Data <- merge(merge(merge(imp_HbO_online, imp_HbO_delayed), imp_HbR_online), imp_HbR_delayed)
-data.list <- list(imp_Data, looking2, age_sex)
+data.list <- list(imp_Data, imp_looking2, age_sex)
 imp_10 <- data.list %>%
   reduce(full_join, by = "id")
-imp_10 <- imp_10[1:53, ]
+imp_10 <- imp_10[1:51, ]
 rm(imp_HbO_online, imp_HbO_delayed, imp_HbR_online, imp_HbR_delayed, imp_Data)
 
 ##add difference collumns
@@ -158,7 +162,7 @@ add_differences <- function(data){
   ## change name to fit old code
   fNIRS.looking.age_sex <- data
   ## remove empty rows where fNIRS Data is missing
-  fNIRS.looking.age_sex <- fNIRS.looking.age_sex[1:53, ]
+  fNIRS.looking.age_sex <- fNIRS.looking.age_sex[1:51, ]
   ### Spalten für channel_diff(online-delayed) hinzufügen
   fNIRS.looking.age_sex$channel1_diff <- fNIRS.looking.age_sex$HbO_online_1 - fNIRS.looking.age_sex$HbO_delayed_1
   fNIRS.looking.age_sex$channel2_diff <- fNIRS.looking.age_sex$HbO_online_2 - fNIRS.looking.age_sex$HbO_delayed_2
@@ -199,7 +203,7 @@ add_differences <- function(data){
 
   ### Spalten für looking_diff_sum hinzufügen
   fNIRS.looking.age_sex$looking_diff_sum <- abs(rowSums(fNIRS.looking.age_sex[163:166], na.rm = TRUE))
-  fNIRS.looking.age_sex <- fNIRS.looking.age_sex[1:53, ]
+  fNIRS.looking.age_sex <- fNIRS.looking.age_sex[1:51, ]
   return(fNIRS.looking.age_sex)
 }
 
@@ -230,11 +234,13 @@ optimize_cluster_silhouette <- function(data){
   fviz_nbclust(grouping_data_new, kmeans, method = "silhouette", k.max = 40) + theme_minimal() + ggtitle("the Elbow Method")
 }
 
-### Cluster plotten (n = Anzahl der Cluster)
-cluster_plot <- function(data, n){
-  grouping_data_new <- data[,2:121]
-  km.res <- kmeans(grouping_data_new, n, nstart = 25)
-  fviz_cluster(km.res, data = grouping_data_new)
+optimize_looking_wss <- function(data){
+  grouping_data_new <- data[-c(6,17,18),122:129]
+  fviz_nbclust(grouping_data_new, kmeans, method = "wss", k.max = 40) + theme_minimal() + ggtitle("Within Sum of Square Method")
+}
+optimize_looking_silhouette <- function(data){
+  grouping_data_new <- data[-c(6,17,18),122:129]
+  fviz_nbclust(grouping_data_new, kmeans, method = "silhouette", k.max = 40) + theme_minimal() + ggtitle("the Elbow Method")
 }
 
 ### get_cluster (n = Anzahl der Cluster)
@@ -244,11 +250,17 @@ get_cluster <- function(data, n){
   return(km.res$cluster)
 }
 
+get_looking_cluster <- function(data, n){
+  grouping_data_new <- data[,122:129]
+  km.res <- kmeans(grouping_data_new, n, nstart = 25)
+  return(km.res$cluster)
+}
+
 ### get looking group
 ## get 2 groups
 looking_2_groups <- function(data){
   data2 <- dplyr::select(data, contains("looking_diff_"))[,1:4]
-  looking_group <- rep("other", 53)
+  looking_group <- rep("other", 51)
   for (i in 1:nrow(data2)) {
     if (all(data2[i, ] > 0, na.rm = TRUE)) {
       looking_group[i] <- "content"
@@ -266,7 +278,7 @@ looking_2_groups <- function(data){
 ## get 3 groups
 looking_3_groups <- function(data){
   data2 <- dplyr::select(data, contains("looking_diff_"))[,1:4]
-  looking_group <- rep("other", 53)
+  looking_group <- rep("other", 51)
   for (i in 1:nrow(data2)) {
     if(anyNA(data2[i, ])) {
       looking_group[i] <- "other"
@@ -296,13 +308,21 @@ get_groups_by_fNIRSmean <- function(data){
 }
 
 ### Add all possible grouping vectors to our data set
-add_all_groups <- function(data, n){
+add_all_groups <- function(data, n, m){
   data <- add_differences(data)
-  data$group_fNIRS_cluster <- get_cluster(data, n)
-  data$group_fNIRS_mean <- get_groups_by_fNIRSmean(data)
-  data$group_looking_2 <- looking_2_groups(data)
-  data$group_looking_3 <- looking_3_groups(data)
+  data$group_fNIRS_cluster <- as.factor(get_cluster(data, n))
+  data$group_fNIRS_mean <- as.factor(get_groups_by_fNIRSmean(data))
+  data$group_looking_2 <- as.factor(looking_2_groups(data))
+  data$group_looking_3 <- as.factor(looking_3_groups(data))
+  data$group_looking_cluster <- as.factor(get_looking_cluster(data, m))
   return(data)
 }
+
+### Cluster plotten (n = Anzahl der Cluster)
+cluster_plot <- function(data){
+  grouping_data_new <- data[,2:121]
+  km.res <- kmeans(grouping_data_new, n, nstart = 25)
+  fviz_cluster(km.res, data = grouping_data_new)
+}
 ### delete unwanted files
-rm(fNIRS2, looking2, data.list, HbO_delayed_data, HbO_online_data, HbR_delayed_data, HbR_online_data, age_sex, fNIRSData, looking)
+rm(fNIRS2, looking2, data.list, HbO_delayed_data, HbO_online_data, HbR_delayed_data, HbR_online_data, age_sex, fNIRSData, looking, imp_looking2)
