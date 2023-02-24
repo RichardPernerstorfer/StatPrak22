@@ -1,0 +1,158 @@
+#################################################
+imp1 <- add_all_groups(imp_1, 7, 3)
+######
+hist(imp1$looking_diff_sum, freq =FALSE,
+     main = "Verteilung des Merkmals looking_diff_mean",
+     ylab = "Dichte", xlab = "looking_diff_sum")
+lines(density(imp1$looking_diff_sum), col= "darkblue")
+
+# 1 group_fnirs_cluster ~ looking_diff_sum
+fNIRS_cluster_looking_multinom<- multinom(formula = group_fNIRS_cluster ~ looking_diff_sum, data = imp1)
+summary(fNIRS_cluster_looking_multinom)
+
+
+# 2 group_fnirs_cluster ~ group_looking_3
+fNIRS_cluster_group_looking_3<- multinom(group_fNIRS_cluster ~ group_looking_3, data=imp1)
+summary(fNIRS_cluster_group_looking_3)
+
+# 3 vglm()
+mydata2 <- imp1[, c(133:162, 171)]
+mydata2$group_looking_3[which(mydata2$group_looking_3 == "other")] <- "a other"
+mydata2$group_looking_3<- as.factor(imp1$group_looking_3)
+
+mydata2$group_looking_3<- ordered(imp1$group_looking_3, levels = c("content", "a other", "side"))
+
+looking_3_orderd_channel_vglm<-vglm(group_looking_3 ~ ., data = mydata2, family=cumulative(parallel=TRUE))
+
+looking_3_orderd_channel_vglm<-vglm(group_looking_3~channel1_diff + channel2_diff +
+                                     channel4_diff + channel6_diff + channel12_diff+
+                                     channel13_diff+ channel17_diff, data=mydata2, family=cumulative(parallel=TRUE))
+
+summary(looking_3_orderd_channel_vglm)
+
+#
+mydata2$group_looking_3[which(mydata2$group_looking_3 == "other")] <- "a other"
+
+
+
+imp1$group_looking_3<- ordered(imp1$group_looking_3, levels = c("content", "other", "side"))    
+
+glm(formula = group_looking_cluster ~ group_fNIRS_cluster, data=imp1)
+
+
+model1 <- multinom(formula =  group_fNIRS_cluster ~ looking_diff_1 + looking_diff_2 + looking_diff_3 + looking_diff_4,
+    data =imp1)
+
+model2<-multinom(formula =  group_looking_3 ~ group_fNIRS_cluster,
+                 data =imp1)
+summary(model2)
+?star.nominal
+
+
+#####
+
+imp1$group_fNIRS_cluster <- as.factor(imp1$group_fNIRS_cluster)
+
+table(imp1[, c("group_looking_cluster", "group_fNIRS_cluster")])
+
+table(imp1[, c("group_looking_cluster", "group_looking_2")])
+
+prop.table(table(imp1[, c("group_looking_cluster", "group_looking_3")]))
+prop.table(table(imp1[, c("group_looking_cluster", "group_fNIRS_cluster")]))
+prop.table(table(imp1[, c("group_fNIRS_cluster", "group_fNIRS_mean")]))
+
+#### Unabhängigkeitstest zwischen group_fNIRS_cluster und group_looking_3
+fisher.test(imp1$group_looking_cluster,
+           imp1$group_looking_3)
+
+chisq.test(imp1$group_looking_cluster,
+           imp1$group_fNIRS_mean)
+
+chisq.test(imp1$group_fNIRS_cluster,
+           imp1$group_fNIRS_mean)
+
+fisher.test(imp1$group_fNIRS_cluster, imp1$group_fNIRS_mean)
+
+looking_fNIRS_cluster_glm <- function(data){
+  glm(formula = looking_diff_sum ~ group_fNIRS_cluster, data = data, family = Gamma())
+}
+
+##### GLM looking_channels_glm
+mydata <- imp1[ ,c(133:162,167)]
+looking_channels_glm <- glm(looking_diff_sum ~ ., family = Gamma(), data = mydata)
+summary(looking_channels_glm)
+# R^2 0.5120587
+
+looking_channels_gam <- gam(looking_diff_sum ~ channel2_diff+s(channel1_diff) + s(channel4_diff)+s(channel6_diff)+s(channel13_diff)
+                            +s(channel6_diff), data = mydata)
+
+glm(looking_diff_sum ~ .*., family = Gamma(), data = mydata)
+
+summary(looking_channels_gam)
+
+stepAIC(looking_channels_glm, direction = "forward")
+
+
+### boosting
+set.seed(234)
+model_0.05 <- glmboost(looking_diff_sum ~ ., data = mydata,
+                       control = boost_control(mstop = 2000, nu = 0.05))
+cv_0.05 <- cvrisk(object = model_0.05,
+                  folds = cv(weights = model.weights(model_0.05),
+                             type = "kfold"))
+mstop(cv_0.05)
+mean(cv_0.05[, mstop(cv_0.05) + 1])
+# mstop 110
+# 1441571083
+
+# Modell mit nu = 0.1:
+set.seed(234)
+model_0.1 <- glmboost(looking_diff_sum ~ ., data = mydata,
+                      control = boost_control(mstop = 2000, nu = 0.1))
+cv_0.1 <- cvrisk(object = model_0.1,
+                 folds = cv(weights = model.weights(model_0.1),
+                            type = "kfold"))
+mstop(cv_0.1)
+mean(cv_0.1[, mstop(cv_0.1) + 1])
+# mstop 54
+# 1441310403
+
+# Modell mit nu = 0.2:
+set.seed(234)
+model_0.2 <- glmboost(looking_diff_sum ~ ., data = mydata,
+                      control = boost_control(mstop = 2000, nu = 0.2))
+cv_0.2<- cvrisk(object = model_0.2,
+                folds = cv(weights = model.weights(model_0.2),
+                           type = "kfold"))
+mstop(cv_0.2)
+mean(cv_0.2[, mstop(cv_0.2) + 1])
+# mstop : 24
+# 1475761877
+
+glmboost(looking_diff_sum ~., data = mydata,
+         control = boost_control(mstop = 54, nu = 0.1))
+
+model_boost_fkt <- function(data){
+  imp_data <- add_all_groups(imp_1, 7, 3)
+  mydata <- imp_data[ ,c(133:162,167)]
+  glmboost(looking_diff_sum ~., data = mydata,
+           control = boost_control(mstop = 54, nu = 0.1))
+}
+model_boost <- glm(looking_diff_sum ~ channel1_diff + channel2_diff +
+                     channel4_diff + channel6_diff + channel12_diff +
+                     channel13_diff + channel17_diff, data = mydata, family = Gamma())
+summary(model_boost)
+#R^2: 0.2985869
+
+
+model_boost <- glm(looking_diff_sum ~ channel4_diff + channel22_diff +
+                     channel21_diff + channel20_diff + channel19_diff+
+                     channel23_diff+ channel24_diff+channel25_diff+channel26_diff, data = mydata, family = Gamma())
+
+glm(group_looking_cluster ~ group_fNIRS_cluster, data = imp1)
+
+
+looking_cluster_channel_vglm<-vglm(group_looking_cluster~channel1_diff + channel2_diff +
+                                     channel4_diff + channel6_diff + channel12_diff+
+                                     channel13_diff+ channel17_diff, data=mydata2, family=cumulative(parallel=TRUE))
+summary(looking_cluster_channel_vglm)
