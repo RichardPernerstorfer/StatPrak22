@@ -316,12 +316,12 @@ get_groups_by_fNIRSmean <- function(data){
 ### Add all possible grouping vectors to our data set
 add_all_groups <- function(data, n, m){
   data <- add_differences(data)
-  data$group_fNIRS_cluster <- as.factor(get_cluster(data, n))
+  data$group_fNIRS_basecluster <- as.factor(get_cluster(data, n))
   data$group_fNIRS_mean <- as.factor(get_groups_by_fNIRSmean(data))
   data$group_looking_2 <- as.factor(looking_2_groups(data))
   data$group_looking_3 <- as.factor(looking_3_groups(data))
   data$group_looking_cluster <- as.factor(get_looking_cluster(data, m))
-  data$group_fNIRSdiff_cluster <- as.factor(get_cluster2(data, n))
+  data$group_fNIRS_cluster <- as.factor(get_cluster2(data, n))
   return(data)
 }
 
