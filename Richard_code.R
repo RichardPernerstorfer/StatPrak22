@@ -15,7 +15,7 @@ library(clustree)
 library(factoextra)
 library(NbClust)
 
-### original data sets
+### original data setsw
 load('looking.RData')
 load('fNIRSData.RData')
 load('age_sex.RData')
@@ -250,6 +250,12 @@ get_cluster <- function(data, n){
   return(km.res$cluster)
 }
 
+get_cluster2 <- function(data, n){
+  grouping_data_new <- data[,133:162]
+  km.res <- kmeans(grouping_data_new, n, nstart = 25)
+  return(km.res$cluster)
+}
+
 get_looking_cluster <- function(data, n){
   grouping_data_new <- data[,122:129]
   km.res <- kmeans(grouping_data_new, n, nstart = 25)
@@ -315,6 +321,7 @@ add_all_groups <- function(data, n, m){
   data$group_looking_2 <- as.factor(looking_2_groups(data))
   data$group_looking_3 <- as.factor(looking_3_groups(data))
   data$group_looking_cluster <- as.factor(get_looking_cluster(data, m))
+  data$group_fNIRSdiff_cluster <- as.factor(get_cluster2(data, n))
   return(data)
 }
 
