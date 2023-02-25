@@ -112,5 +112,13 @@ tests <- function(data){
 
 
 # try ---------------------------------------------------------------------
+multinom(formula = formula1, data = try_data_4) |>
+   summary()
 
+vglm(formula = formula, data = try_data_4, family=cumulative(parallel=TRUE)) |>
+  summary()
+
+
+glm(formula = formula2, data = try_data_4) |>
+  summary()
 
