@@ -331,5 +331,11 @@ cluster_plot <- function(data, n){
   km.res <- kmeans(grouping_data_new, n, nstart = 25)
   fviz_cluster(km.res, data = grouping_data_new)
 }
+
+cluster_looking_plot <- function(data, n){
+  grouping_data_new <- data[-c(6,17,18),122:129]
+  km.res <- kmeans(grouping_data_new, n, nstart = 25)
+  fviz_cluster(km.res, data = grouping_data_new)
+}
 ### delete unwanted files
 rm(fNIRS2, looking2, data.list, HbO_delayed_data, HbO_online_data, HbR_delayed_data, HbR_online_data, age_sex, fNIRSData, looking, imp_looking2)
