@@ -30,8 +30,6 @@ star_fNIRS_mean_group_looking_3 <- function(data){
 }
 
 #### 2. Response:group_looking_3, kovariable:group_fNIRS_mean
-multinom(group_looking_3 ~ group_fNIRS_mean, data = imp1)
-
 group_looking_3_fNIRS_mean<- function(data){
   imp_data <- add_all_groups(data, 7, 3)
   imp_data$group_looking_3[which(imp_data$group_looking_3 == "other")] <- "a other"
@@ -107,14 +105,14 @@ fNIRS_cluste_ego_mirrored <- function(data){
                      `3_ego` + `3_mirrored` + `4_ego` + `4_mirrored`, data = imp_data))
 }
 
-#### 10. Response:group_fnirs_cluster, Kovarieblen:group_looking_3
+#### 10. Response: group_fnirs_cluster, Kovarieblen:group_looking_3
 fNIRS_cluster_group_looking_3 <- function(data){
   imp_data <- add_all_groups(data, 7, 3)
   imp_data$group_looking_3[which(imp_data$group_looking_3 == "other")] <- "a other"
   summary(multinom(group_fNIRS_cluster ~ group_looking_3, data = imp_data))
 }
 
-#### 11. Response:group_fNIRS_cluster, Kovarieblen: looking_diff1_4
+#### 11. Response: group_fNIRS_cluster, Kovarieblen: looking_diff1_4
 
 fNIRS_cluster_looking_diff1_4 <- function(data){
   imp_data <- add_all_groups(data, 7, 3)
