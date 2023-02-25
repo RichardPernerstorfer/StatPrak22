@@ -1,0 +1,124 @@
+
+#### prop.table
+prof_table<- function(data){
+  imp_data <- add_all_groups(data, 3, 3)
+  prof_list <- list(
+    prop.table(table(imp_data[, c("group_looking_cluster", "group_looking_3")])),
+    prop.table(table(imp_data[, c("group_looking_cluster", "group_fNIRS_mean")])),
+    prop.table(table(imp_data[, c("group_looking_cluster", "group_fNIRS_cluster")])),
+    prop.table(table(imp_data[, c("group_fNIRS_cluster", "group_fNIRS_mean")])),
+    prop.table(table(imp_data[, c("group_fNIRS_cluster", "group_looking_3")])),
+    prop.table(table(imp_data[, c("group_fNIRS_mean", "group_looking_3")])))
+  prof_list
+}
+
+
+####### Regression
+
+#### 1. Response:group_fNIRS_mean, kovariable:group_looking_3
+
+fNIRS_mean_group_looking_3 <- function(data){
+  imp_data <- add_all_groups(data, 7, 3)
+  imp_data$group_looking_3[which(imp_data$group_looking_3 == "other")] <- "a other"
+  multinom(group_fNIRS_mean ~ group_looking_3, data = imp_data)
+}
+## Visualisierung durch star.nominal
+star_fNIRS_mean_group_looking_3 <- function(data){
+  imp_data <- add_all_groups(data, 7, 3)
+  imp_data$group_looking_3[which(imp_data$group_looking_3 == "other")] <- "a other"
+  star.nominal(group_fNIRS_mean ~ group_looking_3, data = imp_data)
+}
+
+#### 2. Response:group_looking_3, kovariable:group_fNIRS_mean
+multinom(group_looking_3 ~ group_fNIRS_mean, data = imp1)
+
+group_looking_3_fNIRS_mean<- function(data){
+  imp_data <- add_all_groups(data, 7, 3)
+  imp_data$group_looking_3[which(imp_data$group_looking_3 == "other")] <- "a other"
+  imp_data$group_looking_3 <- as.factor(imp_data$group_looking_3)
+  multinom(group_looking_3 ~ group_fNIRS_mean, data = imp_data)
+}
+
+## Visualisierung durch star.nominal
+star_group_looking_3_fNIRS_mean <- function(data){
+  imp_data <- add_all_groups(data, 7, 3)
+  imp_data$group_looking_3[which(imp_data$group_looking_3 == "other")] <- "a other"
+  imp_data$group_looking_3 <- as.factor(imp_data$group_looking_3)
+  star.nominal(group_looking_3 ~ group_fNIRS_mean, data = imp_data, symmetric = FALSE, printpvalues = FALSE)
+}
+
+#### 3. Response:group_fNIRS_mean, Kovarieblen: looking_diff_sum
+fNIRS_mean_looking_multinom <- function(data){
+  imp_data <- add_all_groups(data, 7, 3)
+  multinom(formula = group_fNIRS_mean ~ looking_diff_sum, data = imp_data)
+}
+
+star_mean_looking_multinom <- function(data){
+  imp_data <- add_all_groups(data, 7, 3)
+  star.nominal(group_fNIRS_mean ~ looking_diff_sum, data = imp_data, symmetric = FALSE, printpvalues = FALSE)
+}
+
+#### 4. Response:group_fNIRS_mean, Kovarieblen: looking_diff1_4
+fNIRS_mean_looking_diff1_4 <- function(data){
+  imp_data <- add_all_groups(data, 7, 3)
+  multinom(group_fNIRS_mean~looking_diff_1+looking_diff_2+looking_diff_3+looking_diff_4, data = imp_data)
+}
+
+#### 5. Response: group_looking_3, Kovariable: 30 channels ***
+
+looking_group_3_channel_multinom <- function(data){
+  imp_data <- add_all_groups(data, 7, 3)
+  mydata <- imp_data[, c(133:162, 171)]
+  mydata$group_looking_3[which(mydata$group_looking_3 == "other")] <- "a other"
+  mydata$group_looking_3<- as.factor(mydata$group_looking_3)
+  summary(multinom(formula = group_looking_3 ~., data = mydata))
+}
+
+
+#### 6. looking_3_orderd_channel_vglm ***
+
+looking_3_orderd_channel_vglm<- function(data){
+  imp_data <- add_all_groups(data, 7, 3)
+  mydata <- imp_data[, c(133:162, 171)]
+  summary(vglm(ordered(mydata$group_looking_3, levels = c("content", "other", "side")) ~ .,
+               data = mydata, family=cumulative(parallel=TRUE)))
+}
+
+
+
+#### 7.  Response: looking_diff_sum, Kovarieblen: 30 channels
+looking_channels_glm <- function(data) {
+  imp_data <- add_all_groups(data, 7, 3)
+  mydata <- imp_data[ ,c(133:162,167)]
+  summary(glm(looking_diff_sum ~ ., family = Gamma(), data = mydata))
+}
+
+
+#### 8. Response:group_fnirs_cluster, Kovarieblen:looking_diff_sum
+fNIRS_cluster_looking_multinom <- function(data){
+  imp_data <- add_all_groups(data, 7, 3)
+  summary(multinom(formula = group_fNIRS_cluster ~ looking_diff_sum, data = imp_data))
+} 
+
+#### 9. Response:group_fNIRS_cluster, Kovarieblen: 1-4 ego/mirrored
+fNIRS_cluste_ego_mirrored <- function(data){
+  imp_data <- add_all_groups(data, 7, 3)
+  summary(multinom(group_fNIRS_cluster ~ `1_ego` + `1_mirrored` + `2_ego` + `2_mirrored` +
+                     `3_ego` + `3_mirrored` + `4_ego` + `4_mirrored`, data = imp_data))
+}
+
+#### 10. Response:group_fnirs_cluster, Kovarieblen:group_looking_3
+fNIRS_cluster_group_looking_3 <- function(data){
+  imp_data <- add_all_groups(data, 7, 3)
+  imp_data$group_looking_3[which(imp_data$group_looking_3 == "other")] <- "a other"
+  summary(multinom(group_fNIRS_cluster ~ group_looking_3, data = imp_data))
+}
+
+#### 11. Response:group_fNIRS_cluster, Kovarieblen: looking_diff1_4
+
+fNIRS_cluster_looking_diff1_4 <- function(data){
+  imp_data <- add_all_groups(data, 7, 3)
+  summary(multinom(group_fNIRS_cluster~
+                     looking_diff_1+looking_diff_2+looking_diff_3+looking_diff_4,
+                   data = imp_data))
+}
