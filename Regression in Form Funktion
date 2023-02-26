@@ -72,6 +72,27 @@ looking_group_3_channel_multinom <- function(data){
   summary(multinom(formula = group_looking_3 ~., data = mydata))
 }
 
+#### Suche channels
+find_channels <- function(data){
+  set.seed(123)
+  imp_data <- add_all_groups(data, 3, 3)
+  neg_content <- names(which(looking_group_3_channel_multinom(imp_data)$coefficient[1, ]<0))
+  
+  pos_side <- names(which(looking_group_3_channel_multinom(imp_data)$coefficient[2, ]>0))
+  
+  pos_content <- names(which(looking_group_3_channel_multinom(imp_data)$coefficient[1, ]<0))
+  
+  neg_side <- names(which(looking_group_3_channel_multinom(imp_data)$coefficient[1, ]<0))
+  
+  negContent_posSide <- intersect(neg_content, pos_side)
+  posContent_negSide <- intersect(pos_content, neg_side)
+  posContent_posSide <- intersect(pos_content, pos_side)
+  negContent_negSide <- intersect(neg_content, neg_side)
+  
+  channel_list <- list(negContent_posSide, posContent_negSide, posContent_posSide, negContent_negSide)
+  names(channel_list) <- c("negContent_posSide", "posContent_negSide", "posContent_posSide", "negContent_negSide")
+  return(channel_list)
+}
 
 #### 6. looking_3_orderd_channel_vglm ***
 
