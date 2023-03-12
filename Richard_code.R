@@ -343,5 +343,61 @@ cluster_looking_plot <- function(data, n){
   fviz_cluster(km.res, data = grouping_data_new) +
    theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
 }
+### Kapitel: NAs und Imputation
+new_data <- dplyr::select(fNIRS2, contains("HbO_online"))[,2:31]
+# Plot NAs pro Channel
+ggplot(data.frame(colSums(is.na(new_data))), aes(seq_along(colSums(is.na(new_data))), colSums(is.na(new_data)))) + 
+  geom_bar(stat = "identity") + ggtitle("Anzahl NAs in Channel") + labs(x = "Channel", y = "Anzahl NAs") + 
+  theme_light() +
+  theme(plot.title = element_text(size = 24, face = "bold"), 
+        axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16)) + scale_x_discrete(limits = c(1:30))
+# Wie viele NAs fNIRS
+length(which(is.na(new_data))) / (ncol(new_data)*nrow(new_data))
+# Wie viele Probanden ohne NAs fNIRS
+length(which(rowSums(is.na(new_data)) == 0))
+# maximale Anzahl an NAs pro Proband
+max(rowSums(is.na(new_data)))
+# median Anzahl an NAs pro Proband
+median(rowSums(is.na(new_data)))
+# Plot NAs pro Proband
+ggplot(data.frame(rowSums(is.na(new_data))), aes(seq_along(rowSums(is.na(new_data))), rowSums(is.na(new_data)))) + 
+  geom_bar(stat = "identity") + ggtitle("NAs in Probanden") + labs(x = "Proband", y = "Anzahl NAs") + 
+  theme(plot.title = element_text(size = 24, face = "bold"), 
+        axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16))
+# Wie viele NAs looking
+length(which(is.na(looking2))) / (8*nrow(new_data))
+# Wie viele Probanden ohne NAs looking
+length(which(rowSums(is.na(looking2)) == 0))
+
+### Kapitel: eigene Gruppen
+summary(add_all_groups(imp_1, 3, 3)$group_fNIRS_mean)
+summary(add_all_groups(imp_2, 3, 3)$group_fNIRS_mean)
+summary(add_all_groups(imp_3, 3, 3)$group_fNIRS_mean)
+summary(add_all_groups(imp_4, 3, 3)$group_fNIRS_mean)
+summary(add_all_groups(imp_5, 3, 3)$group_fNIRS_mean)
+summary(add_all_groups(imp_6, 3, 3)$group_fNIRS_mean)
+summary(add_all_groups(imp_7, 3, 3)$group_fNIRS_mean)
+summary(add_all_groups(imp_8, 3, 3)$group_fNIRS_mean)
+summary(add_all_groups(imp_9, 3, 3)$group_fNIRS_mean)
+summary(add_all_groups(imp_10, 3, 3)$group_fNIRS_mean)
+median(c(as.vector(summary(add_all_groups(imp_1, 3, 3)$group_fNIRS_mean))[1],
+       as.vector(summary(add_all_groups(imp_2, 3, 3)$group_fNIRS_mean))[1],
+       as.vector(summary(add_all_groups(imp_3, 3, 3)$group_fNIRS_mean))[1],
+       as.vector(summary(add_all_groups(imp_4, 3, 3)$group_fNIRS_mean))[1],
+       as.vector(summary(add_all_groups(imp_5, 3, 3)$group_fNIRS_mean))[1],
+       as.vector(summary(add_all_groups(imp_6, 3, 3)$group_fNIRS_mean))[1],
+       as.vector(summary(add_all_groups(imp_7, 3, 3)$group_fNIRS_mean))[1],
+       as.vector(summary(add_all_groups(imp_8, 3, 3)$group_fNIRS_mean))[1],
+       as.vector(summary(add_all_groups(imp_9, 3, 3)$group_fNIRS_mean))[1],
+       as.vector(summary(add_all_groups(imp_10, 3, 3)$group_fNIRS_mean))[1]))
+summary(add_all_groups(imp_1, 3, 3)$group_looking_3)
+
+### Kapitel Frage 2
+# Kontingenztafel FNIRS Cluster Looking Cluster
+prop.table(table(imp1$group_looking_cluster, imp1$group_fNIRS_cluster))
+fisher.test(table(imp1$group_looking_cluster, imp1$group_fNIRS_cluster))
+# Kontingenztafel fNIRS Gruppe Looking Gruppe
+prop.table(table(imp1$group_fNIRS_mean, imp1$group_looking_3))
+fisher.test(table(imp1$group_fNIRS_mean, imp1$group_looking_3))
 ### delete unwanted files
 rm(fNIRS2, looking2, data.list, HbO_delayed_data, HbO_online_data, HbR_delayed_data, HbR_online_data, age_sex, fNIRSData, looking, imp_looking2)
