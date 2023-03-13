@@ -247,6 +247,17 @@ optimize_looking_silhouette <- function(data){
    theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
 }
 
+optimize_channels_wss <- function(data){
+  grouping_data_new <- data
+  fviz_nbclust(grouping_data_new, kmeans, method = "wss", k.max = 15) + theme_minimal() + ggtitle("Within Sum of Square Method") +
+   theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
+}
+optimize_channels_silhouette <- function(data){
+  grouping_data_new <- data
+  fviz_nbclust(grouping_data_new, kmeans, method = "silhouette", k.max = 15) + theme_minimal() + ggtitle("the Elbow Method") +
+   theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
+}
+
 ### get_cluster (n = Anzahl der Cluster)
 get_cluster <- function(data, n){
   grouping_data_new <- data[,2:121]
@@ -368,6 +379,24 @@ ggplot(data.frame(rowSums(is.na(new_data))), aes(seq_along(rowSums(is.na(new_dat
 length(which(is.na(looking2))) / (8*nrow(new_data))
 # Wie viele Probanden ohne NAs looking
 length(which(rowSums(is.na(looking2)) == 0))
+
+### Kapitel: Frage 1
+
+# nach Channels
+imp2 <- add_all_groups(imp_2, 3, 3)
+imp2 <- imp2[,133:162]
+imp2 <- t(imp2)
+optimize_channels_wss(imp2)
+optimize_channels_silhouette(imp2)
+cluster_plot(imp2,2)
+# nach Probanden
+optimize_cluster_wss(imp_2)
+optimize_cluster_silhouette(imp_2)
+cluster_plot(imp_2,3)
+# nach Looking
+optimize_looking_wss(imp_2)
+optimize_looking_silhouette(imp_2)
+cluster_plot(imp_2,3)
 
 ### Kapitel: eigene Gruppen
 summary(add_all_groups(imp_1, 3, 3)$group_fNIRS_mean)
