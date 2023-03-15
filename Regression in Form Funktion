@@ -1,6 +1,7 @@
 
 #### prop.table
 prof_table<- function(data){
+  set.seed(123)
   imp_data <- add_all_groups(data, 3, 3)
   prof_list <- list(
     prop.table(table(imp_data[, c("group_looking_cluster", "group_looking_3")])),
@@ -13,131 +14,177 @@ prof_table<- function(data){
 }
 
 
-####### Regression
 
-#### 1. Response:group_fNIRS_mean, kovariable:group_looking_3
 
-fNIRS_mean_group_looking_3 <- function(data){
-  imp_data <- add_all_groups(data, 7, 3)
-  imp_data$group_looking_3[which(imp_data$group_looking_3 == "other")] <- "a other"
-  multinom(group_fNIRS_mean ~ group_looking_3, data = imp_data)
-}
-## Visualisierung durch star.nominal
-star_fNIRS_mean_group_looking_3 <- function(data){
-  imp_data <- add_all_groups(data, 7, 3)
-  imp_data$group_looking_3[which(imp_data$group_looking_3 == "other")] <- "a other"
-  star.nominal(group_fNIRS_mean ~ group_looking_3, data = imp_data)
-}
-
-#### 2. Response:group_looking_3, kovariable:group_fNIRS_mean
+#### 2. Response:group_looking_3, kovariable:group_fNIRS_mean ++++++
 group_looking_3_fNIRS_mean<- function(data){
-  imp_data <- add_all_groups(data, 7, 3)
+  set.seed(123)
+  imp_data <- add_all_groups(data, 3, 3)
   imp_data$group_looking_3[which(imp_data$group_looking_3 == "other")] <- "a other"
   imp_data$group_looking_3 <- as.factor(imp_data$group_looking_3)
-  multinom(group_looking_3 ~ group_fNIRS_mean, data = imp_data)
+  summary(multinom(group_looking_3 ~ group_fNIRS_mean, data = imp_data))
 }
 
-## Visualisierung durch star.nominal
+## Graphische Visualisierung des Modellergebnises durch Effektstar 
 star_group_looking_3_fNIRS_mean <- function(data){
-  imp_data <- add_all_groups(data, 7, 3)
+  imp_data <- add_all_groups(data, 3, 3)
   imp_data$group_looking_3[which(imp_data$group_looking_3 == "other")] <- "a other"
   imp_data$group_looking_3 <- as.factor(imp_data$group_looking_3)
-  star.nominal(group_looking_3 ~ group_fNIRS_mean, data = imp_data, symmetric = FALSE, printpvalues = FALSE)
+  star.nominal(group_looking_3 ~ group_fNIRS_mean, data = imp_data,
+               symmetric = TRUE, printpvalues = FALSE, select = 2:2,
+               lwd.circle = 3, lwd.stars=3, cex.labels = 2, cex.cat = 2)
+  title(main = "Graphische Visualisierung\n des Modellergebnisses", cex.main=2 )
 }
+star_group_looking_3_fNIRS_mean(imp_1)
+## oder imp_4
 
-#### 3. Response:group_fNIRS_mean, Kovarieblen: looking_diff_sum
-fNIRS_mean_looking_multinom <- function(data){
-  imp_data <- add_all_groups(data, 7, 3)
-  multinom(formula = group_fNIRS_mean ~ looking_diff_sum, data = imp_data)
-}
 
-star_mean_looking_multinom <- function(data){
-  imp_data <- add_all_groups(data, 7, 3)
-  star.nominal(group_fNIRS_mean ~ looking_diff_sum, data = imp_data, symmetric = FALSE, printpvalues = FALSE)
-}
+#### Schätzung eines multinomialen Logit-Modells:
+##   Response: group_looking_3, Kovariable: HbO-Differenz der 30 channels ***
 
-#### 4. Response:group_fNIRS_mean, Kovarieblen: looking_diff1_4
-fNIRS_mean_looking_diff1_4 <- function(data){
-  imp_data <- add_all_groups(data, 7, 3)
-  multinom(group_fNIRS_mean~looking_diff_1+looking_diff_2+looking_diff_3+looking_diff_4, data = imp_data)
-}
-
-#### 5. Response: group_looking_3, Kovariable: 30 channels ***
-
-looking_group_3_channel_multinom <- function(data){
-  imp_data <- add_all_groups(data, 7, 3)
+looking_group_3_channel <- function(data){
+  set.seed(123)
+  imp_data <- add_all_groups(data, 3, 3)
   mydata <- imp_data[, c(133:162, 171)]
   mydata$group_looking_3[which(mydata$group_looking_3 == "other")] <- "a other"
   mydata$group_looking_3<- as.factor(mydata$group_looking_3)
   summary(multinom(formula = group_looking_3 ~., data = mydata))
 }
+looking_group_3_channel(imp_1)
 
-#### Suche channels
-find_channels <- function(data){
+
+## Suche nach grünen Channeln
+find_big_difference_side <- function(data){
   set.seed(123)
   imp_data <- add_all_groups(data, 3, 3)
-  neg_content <- names(which(looking_group_3_channel_multinom(imp_data)$coefficient[1, ]<0))
-  
-  pos_side <- names(which(looking_group_3_channel_multinom(imp_data)$coefficient[2, ]>0))
-  
-  pos_content <- names(which(looking_group_3_channel_multinom(imp_data)$coefficient[1, ]<0))
-  
-  neg_side <- names(which(looking_group_3_channel_multinom(imp_data)$coefficient[1, ]<0))
-  
-  negContent_posSide <- intersect(neg_content, pos_side)
-  posContent_negSide <- intersect(pos_content, neg_side)
-  posContent_posSide <- intersect(pos_content, pos_side)
-  negContent_negSide <- intersect(neg_content, neg_side)
-  
-  channel_list <- list(negContent_posSide, posContent_negSide, posContent_posSide, negContent_negSide)
-  names(channel_list) <- c("negContent_posSide", "posContent_negSide", "posContent_posSide", "negContent_negSide")
-  return(channel_list)
+  names(which((looking_group_3_channel(data)$coefficient[2, ]-
+                 looking_group_3_channel(data)$coefficient[1, ]) >=
+                mean((abs(looking_group_3_channel(data)$coefficient[1, ])+
+                        abs(looking_group_3_channel(data)$coefficient[2, ]))[-1])))
 }
+find_big_difference_side(imp_1)
 
-#### 6. looking_3_orderd_channel_vglm ***
 
-looking_3_orderd_channel_vglm<- function(data){
-  imp_data <- add_all_groups(data, 7, 3)
-  mydata <- imp_data[, c(133:162, 171)]
-  summary(vglm(ordered(mydata$group_looking_3, levels = c("content", "other", "side")) ~ .,
-               data = mydata, family=cumulative(parallel=TRUE)))
+## Suche nach roten Channeln
+find_big_difference_content <- function(data){
+  set.seed(123)
+  imp_data <- add_all_groups(data, 3, 3)
+  names(which((looking_group_3_channel(data)$coefficient[1, ]-
+                 looking_group_3_channel(data)$coefficient[2, ]) >=
+                mean((abs(looking_group_3_channel(data)$coefficient[1, ])+
+                        abs(looking_group_3_channel(data)$coefficient[2, ]))[-1])))
 }
 
 
+## Visualisierung  der grünen Channel
+# Channel 2
+boxplot_channel_looking_group <- function(data){
+  set.seed(123)
+  imp_data <- add_all_groups(data, 3, 3)
+  ggbetweenstats(imp_data, x = group_looking_3, y = channel2_diff,
+                 plot.type = "box", type = "parametric", var.equal = FALSE, bf.message = FALSE)+
+    xlab("Looking-Gruppen")+ylab("HbO-Differenz (online-delayed)")+
+    ggtitle("Zusammenhang zwischen Looking-Gruppen und channel 2")+
+    theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
+}
 
-#### 7.  Response: looking_diff_sum, Kovarieblen: 30 channels
+# Channel13
+boxplot_channel_looking_group <- function(data){
+  set.seed(123)
+  imp_data <- add_all_groups(data, 3, 3)
+  ggbetweenstats(imp_data, x = group_looking_3, y = channel13_diff,
+                 plot.type = "box", type = "parametric", var.equal = FALSE, bf.message = FALSE)+
+    xlab("Looking-Gruppen")+ylab("HbO-Differenz (online-delayed)")+
+    ggtitle("Zusammenhang zwischen Looking-Gruppen und channel 13")+
+    theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
+}
+
+# Channel 18
+boxplot_channel_looking_group <- function(data){
+  set.seed(123)
+  imp_data <- add_all_groups(data, 3, 3)
+  ggbetweenstats(imp_data, x = group_looking_3, y = channel18_diff,
+                 plot.type = "box", type = "parametric", var.equal = FALSE, bf.message = FALSE)+
+    xlab("Looking-Gruppen")+ylab("HbO-Differenz (online-delayed)")+
+    ggtitle("Zusammenhang zwischen Looking-Gruppen und channel 18")+
+    theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
+}
+
+# Channel 27
+boxplot_channel_looking_group <- function(data){
+  set.seed(123)
+  imp_data <- add_all_groups(data, 3, 3)
+  ggbetweenstats(imp_data, x = group_looking_3, y = channel27_diff,
+                 plot.type = "box", type = "parametric", var.equal = FALSE, bf.message = FALSE)+
+    xlab("Looking-Gruppen")+ylab("HbO-Differenz (online-delayed)")+
+    ggtitle("Zusammenhang zwischen Looking-Gruppen und channel 27")+
+    theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
+}
+
+## channel2: imp_9, channel13:imp_2, channel18:imp_5, channel27: imp_10
+## channel11: imp_10, channel10:imp_4, channel15: imp_8
+
+## Visualisierung  der roten Channel
+# Channel 10
+boxplot_channel_looking_group <- function(data){
+  set.seed(123)
+  imp_data <- add_all_groups(data, 3, 3)
+  ggbetweenstats(imp_data, x = group_looking_3, y = channel10_diff,
+                 plot.type = "box", type = "parametric", var.equal = FALSE, bf.message = FALSE)+
+    xlab("Looking-Gruppen")+ylab("HbO-Differenz (online-delayed)")+
+    ggtitle("Zusammenhang zwischen Looking-Gruppen und channel 10")+
+    theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
+}
+
+# Channel 11
+boxplot_channel_looking_group <- function(data){
+  set.seed(123)
+  imp_data <- add_all_groups(data, 3, 3)
+  ggbetweenstats(imp_data, x = group_looking_3, y = channel11_diff,
+                 plot.type = "box", type = "parametric", var.equal = FALSE, bf.message = FALSE)+
+    xlab("Looking-Gruppen")+ylab("HbO-Differenz (online-delayed)")+
+    ggtitle("Zusammenhang zwischen Looking-Gruppen und channel 11")+
+    theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
+}
+
+# Channel 15
+boxplot_channel_looking_group <- function(data){
+  set.seed(123)
+  imp_data <- add_all_groups(data, 3, 3)
+  ggbetweenstats(imp_data, x = group_looking_3, y = channel15_diff,
+                 plot.type = "box", type = "parametric", var.equal = FALSE, bf.message = FALSE)+
+    xlab("Looking-Gruppen")+ylab("HbO-Differenz (online-delayed)")+
+    ggtitle("Zusammenhang zwischen Looking-Gruppen und channel 15")+
+    theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
+}
+
+
+#### Schätzung eines generalisierten Linearen Modells ohne Variablenselektion
+## Response: looking_diff_sum, Kovarieblen: HbO-Differenz der 30 Channel
 looking_channels_glm <- function(data) {
-  imp_data <- add_all_groups(data, 7, 3)
+  set.seed(123)
+  imp_data <- add_all_groups(data, 3, 3)
   mydata <- imp_data[ ,c(133:162,167)]
-  summary(glm(looking_diff_sum ~ ., family = Gamma(), data = mydata))
+  summary(glm(looking_diff_sum ~ .,family = gaussian(link = "identity"),  data = mydata))
 }
 
-
-#### 8. Response:group_fnirs_cluster, Kovarieblen:looking_diff_sum
-fNIRS_cluster_looking_multinom <- function(data){
-  imp_data <- add_all_groups(data, 7, 3)
-  summary(multinom(formula = group_fNIRS_cluster ~ looking_diff_sum, data = imp_data))
-} 
-
-#### 9. Response:group_fNIRS_cluster, Kovarieblen: 1-4 ego/mirrored
-fNIRS_cluste_ego_mirrored <- function(data){
-  imp_data <- add_all_groups(data, 7, 3)
-  summary(multinom(group_fNIRS_cluster ~ `1_ego` + `1_mirrored` + `2_ego` + `2_mirrored` +
-                     `3_ego` + `3_mirrored` + `4_ego` + `4_mirrored`, data = imp_data))
+#### Variablenselektion
+select_channel <- function(data){
+set.seed(123)
+imp_data <- add_all_groups(data, 3, 3)
+mydata <- imp_data[ ,c(133:162,167)]
+select_looking_channels <- glm(formula = looking_diff_sum ~ .,family = gaussian(link = "identity"), data = mydata)
+stepAIC(select_looking_channels, direction = "backward")
 }
 
-#### 10. Response: group_fnirs_cluster, Kovarieblen:group_looking_3
-fNIRS_cluster_group_looking_3 <- function(data){
-  imp_data <- add_all_groups(data, 7, 3)
-  imp_data$group_looking_3[which(imp_data$group_looking_3 == "other")] <- "a other"
-  summary(multinom(group_fNIRS_cluster ~ group_looking_3, data = imp_data))
-}
-
-#### 11. Response: group_fNIRS_cluster, Kovarieblen: looking_diff1_4
-
-fNIRS_cluster_looking_diff1_4 <- function(data){
-  imp_data <- add_all_groups(data, 7, 3)
-  summary(multinom(group_fNIRS_cluster~
-                     looking_diff_1+looking_diff_2+looking_diff_3+looking_diff_4,
-                   data = imp_data))
+#### Schätzung eines generalisierten Linearen Modells mit Variablenselektion
+## Response: looking_diff_sum, Kovarieblen: HbO-Differenz der selektierten Channel
+looking_channels_glm_selected <- function(data) {
+  set.seed(123)
+  imp_data <- add_all_groups(data, 3, 3)
+  mydata <- imp_data[ ,c(133:162,167)]
+  summary(glm(looking_diff_sum ~ channel1_diff+channel2_diff+channel3_diff+channel4_diff+channel6_diff+channel8_diff+
+                channel9_diff+channel10_diff+channel11_diff+channel12_diff+channel13_diff+channel17_diff+channel18_diff+
+                channel23_diff+channel25_diff+channel29_diff,
+              family = gaussian(link = "identity"),  data = mydata))
 }
