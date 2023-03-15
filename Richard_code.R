@@ -397,6 +397,13 @@ corrplot_channel_diffHbR <- corrplot(korr_tab_diffHbR, type = "upper", order = "
 
 
 ## Verteilung der HbO-Channel
+ndata <- imp1[,c(2:61) ]
+colnames(ndata) <- c(1:30, 1:30)
+ggplot(melt(ndata),mapping = aes(variable, value)) + 
+  ggtitle("Verteilung der HbO-Channel") + labs(x = "Channel", y = "HbO") + 
+  theme(plot.title = element_text(size = 24, face = "bold"), 
+        axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16))+ 
+  geom_jitter(width = 0.15,alpha = 0.3, size = 2)
 # nach Channels
 imp2 <- add_all_groups(imp_2, 3, 3)
 imp2 <- imp2[,133:162]
