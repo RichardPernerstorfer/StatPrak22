@@ -383,18 +383,15 @@ length(which(rowSums(is.na(looking2)) == 0))
 ### Kapitel: Frage 1
 ##Korrelationsplots
 
-## korr_tab_diffHbO
-
-corrplot_channel_diffHbO <- corrplot(korr_tab_diffHbO, type = "upper", order = "AOE",
-         title = "Korrelationsplot der HbO-Differenzen", mar=c(1, 1, 1, 1), tl.cex=0.5) +
+Korrelationsplot <- function(data) {
+imp_data <- add_all_groups(data, 3, 3)
+corr_tab_diff <- cor(imp_data[133:162])
+colnames(corr_tab_diff) <- c(1:30)
+rownames(corr_tab_diff) <- c(1:30)
+corrplot_channel_diffHbO <- corrplot(corr_tab_diff, type = "upper", order = "AOE",
+                                     title = "Korrelationsplot der HbO-Differenzen", mar=c(1, 1, 1, 1), tl.cex=0.5) +
   theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
-
-## korr_tab_diffHbR
-corrplot_channel_diffHbR <- corrplot(korr_tab_diffHbR, type = "upper", order = "AOE",
-                                     title = "Korrelationsplot der HbR-Differenzen",
-                                     mar=c(1, 1, 1, 1), tl.cex=0.5) +
-  theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
-
+}
 
 ## Verteilung der HbO-Channel
 ndata <- imp1[,c(2:61) ]
