@@ -613,7 +613,17 @@ looking_channels_glm <- function(data) {
   set.seed(123)
   imp_data <- add_all_groups(data, 3, 3)
   mydata <- imp_data[ ,c(133:162,167)]
-  summary(glm(looking_diff_sum ~ .,family = gaussian(link = "identity"),  data = mydata))
+  colnames(mydata) <- c("Channel 1", "Channel 2", "Channel 3",
+                        "Channel 4", "Channel 5", "Channel 6",
+                        "Channel 7", "Channel 8", "Channel 9",
+                        "Channel 10", "Channel 11", "Channel 12",
+                        "Channel 13", "Channel 14", "Channel 15",
+                        "Channel 16", "Channel 17", "Channel 18",
+                        "Channel 19", "Channel 20", "Channel 21",
+                        "Channel 22", "Channel 23", "Channel 24",
+                        "Channel 25", "Channel 26", "Channel 27",
+                        "Channel 28", "Channel 29", "Channel 30", "Looking_Indikator")
+  summary(glm(Looking_Indikator ~ .,family = gaussian(link = "identity"),  data = mydata))
 }
 
 #### Variablenselektion
@@ -621,7 +631,17 @@ select_channel <- function(data){
 set.seed(123)
 imp_data <- add_all_groups(data, 3, 3)
 mydata <- imp_data[ ,c(133:162,167)]
-select_looking_channels <- glm(formula = looking_diff_sum ~ .,family = gaussian(link = "identity"), data = mydata)
+colnames(mydata) <- c("Channel 1", "Channel 2", "Channel 3",
+                      "Channel 4", "Channel 5", "Channel 6",
+                      "Channel 7", "Channel 8", "Channel 9",
+                      "Channel 10", "Channel 11", "Channel 12",
+                      "Channel 13", "Channel 14", "Channel 15",
+                      "Channel 16", "Channel 17", "Channel 18",
+                      "Channel 19", "Channel 20", "Channel 21",
+                      "Channel 22", "Channel 23", "Channel 24",
+                      "Channel 25", "Channel 26", "Channel 27",
+                      "Channel 28", "Channel 29", "Channel 30", "Looking_Indikator")
+select_looking_channels <- glm(formula = Looking_Indikator ~ .,family = gaussian(link = "identity"), data = mydata)
 stepAIC(select_looking_channels, direction = "backward")
 }
 
@@ -631,8 +651,20 @@ looking_channels_glm_selected <- function(data) {
   set.seed(123)
   imp_data <- add_all_groups(data, 3, 3)
   mydata <- imp_data[ ,c(133:162,167)]
-  summary(glm(looking_diff_sum ~ channel1_diff+channel2_diff+channel3_diff+channel4_diff+channel6_diff+channel8_diff+
-                channel9_diff+channel10_diff+channel11_diff+channel12_diff+channel13_diff+channel17_diff+channel18_diff+
-                channel23_diff+channel25_diff+channel29_diff,
-              family = gaussian(link = "identity"),  data = mydata))
+  colnames(mydata) <- c("Channel 1", "Channel 2", "Channel 3",
+                        "Channel 4", "Channel 5", "Channel 6",
+                        "Channel 7", "Channel 8", "Channel 9",
+                        "Channel 10", "Channel 11", "Channel 12",
+                        "Channel 13", "Channel 14", "Channel 15",
+                        "Channel 16", "Channel 17", "Channel 18",
+                        "Channel 19", "Channel 20", "Channel 21",
+                        "Channel 22", "Channel 23", "Channel 24",
+                        "Channel 25", "Channel 26", "Channel 27",
+                        "Channel 28", "Channel 29", "Channel 30", "Looking_Indikator")
+  summary(glm(formula = Looking_Indikator ~ `Channel 1` + `Channel 2` + 
+                `Channel 4` + `Channel 7` + `Channel 8` + `Channel 9` + `Channel 10` + 
+                `Channel 11` + `Channel 12` + `Channel 13` + `Channel 15` + 
+                `Channel 17` + `Channel 18` + `Channel 19` + `Channel 22` + 
+                `Channel 23` + `Channel 24` + `Channel 25` + `Channel 27` + 
+                `Channel 29`, family = gaussian(link = "identity"), data = mydata))
 }
