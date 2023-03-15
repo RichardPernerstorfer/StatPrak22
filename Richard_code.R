@@ -381,7 +381,9 @@ length(which(is.na(looking2))) / (8*nrow(new_data))
 length(which(rowSums(is.na(looking2)) == 0))
 
 ### Kapitel: Frage 1
+##Korrelationsplots
 
+## Verteilung der HbO-Channel
 # nach Channels
 imp2 <- add_all_groups(imp_2, 3, 3)
 imp2 <- imp2[,133:162]
