@@ -14,6 +14,7 @@ library(mice)
 library(clustree)
 library(factoextra)
 library(NbClust)
+library(reshape2)
 
 ### original data setsw
 load('looking.RData')
