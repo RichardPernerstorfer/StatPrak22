@@ -417,7 +417,7 @@ cluster_plot(imp_2,3)
 # nach Looking
 optimize_looking_wss(imp_2)
 optimize_looking_silhouette(imp_2)
-cluster_plot(imp_2,3)
+cluster_looking_plot(imp_2,3)
 
 ### Kapitel: eigene Gruppen
 summary(add_all_groups(imp_1, 3, 3)$group_fNIRS_mean)
@@ -449,8 +449,7 @@ fisher.test(table(imp1$group_looking_cluster, imp1$group_fNIRS_cluster))
 # Kontingenztafel fNIRS Gruppe Looking Gruppe
 prop.table(table(imp1$group_fNIRS_mean, imp1$group_looking_3))
 fisher.test(table(imp1$group_fNIRS_mean, imp1$group_looking_3))
-### delete unwanted files
-rm(fNIRS2, looking2, data.list, HbO_delayed_data, HbO_online_data, HbR_delayed_data, HbR_online_data, age_sex, fNIRSData, looking, imp_looking2)
+
 
 
 
@@ -670,3 +669,5 @@ looking_channels_glm_selected <- function(data) {
                 `Channel 23` + `Channel 24` + `Channel 25` + `Channel 27` + 
                 `Channel 29`, family = gaussian(link = "identity"), data = mydata))
 }
+### delete unwanted files
+rm(fNIRS2, looking2, data.list, HbO_delayed_data, HbO_online_data, HbR_delayed_data, HbR_online_data, age_sex, fNIRSData, looking, imp_looking2)
