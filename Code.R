@@ -467,8 +467,8 @@ prof_table <- function(data){
   prof_list
 }
 
-
-#### 2. Response:group_looking_3, kovariable:group_fNIRS_mean 
+#### Schätzung eines multinomialen Logit-Modells:
+## Response:group_looking_3, kovariable:group_fNIRS_mean 
 group_looking_3_fNIRS_mean<- function(data){
   set.seed(123)
   imp_data <- add_all_groups(data, 3, 3)
@@ -488,9 +488,9 @@ star_group_looking_3_fNIRS_mean <- function(data){
   title(main = "Graphische Visualisierung\n des Modellergebnisses", cex.main=2 )
 }
 star_group_looking_3_fNIRS_mean(imp_1)
-## oder imp_4
 
 
+#### Kapitel: Frage 3
 #### Schätzung eines multinomialen Logit-Modells:
 ##   Response: group_looking_3, Kovariable: HbO-Differenz der 30 channels ***
 
@@ -539,7 +539,8 @@ boxplot_channel_looking_group <- function(data){
     ggtitle("Zusammenhang zwischen Looking-Gruppen und channel 2")+
     theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
 }
-boxplot_channel_looking_group(imp_1)
+
+
 # Channel13
 boxplot_channel_looking_group <- function(data){
   set.seed(123)
@@ -550,7 +551,8 @@ boxplot_channel_looking_group <- function(data){
     ggtitle("Zusammenhang zwischen Looking-Gruppen und channel 13")+
     theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
 }
-boxplot_channel_looking_group(imp_1)
+
+
 # Channel 18
 boxplot_channel_looking_group <- function(data){
   set.seed(123)
@@ -561,7 +563,7 @@ boxplot_channel_looking_group <- function(data){
     ggtitle("Zusammenhang zwischen Looking-Gruppen und channel 18")+
     theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
 }
-boxplot_channel_looking_group(imp_1)
+
 # Channel 27
 boxplot_channel_looking_group <- function(data){
   set.seed(123)
@@ -572,7 +574,7 @@ boxplot_channel_looking_group <- function(data){
     ggtitle("Zusammenhang zwischen Looking-Gruppen und channel 27")+
     theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
 }
-boxplot_channel_looking_group(imp_1)
+
 ## Visualisierung  der roten Channel
 # Channel 10
 boxplot_channel_looking_group <- function(data){
@@ -584,7 +586,7 @@ boxplot_channel_looking_group <- function(data){
     ggtitle("Zusammenhang zwischen Looking-Gruppen und channel 10")+
     theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
 }
-boxplot_channel_looking_group(imp_1)
+
 # Channel 11
 boxplot_channel_looking_group <- function(data){
   set.seed(123)
@@ -595,7 +597,7 @@ boxplot_channel_looking_group <- function(data){
     ggtitle("Zusammenhang zwischen Looking-Gruppen und channel 11")+
     theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
 }
-boxplot_channel_looking_group(imp_1)
+
 # Channel 15
 boxplot_channel_looking_group <- function(data){
   set.seed(123)
@@ -606,7 +608,6 @@ boxplot_channel_looking_group <- function(data){
     ggtitle("Zusammenhang zwischen Looking-Gruppen und channel 15")+
     theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
 }
-boxplot_channel_looking_group(imp_1)
 
 #### Schätzung eines generalisierten Linearen Modells ohne Variablenselektion
 ## Response: looking_diff_sum, Kovarieblen: HbO-Differenz der 30 Channel
@@ -627,7 +628,7 @@ looking_channels_glm <- function(data) {
   summary(glm(Looking_Indikator ~ .,family = gaussian(link = "identity"),  data = mydata))
 }
 
-#### Variablenselektion
+## Variablenselektion
 select_channel <- function(data){
 set.seed(123)
 imp_data <- add_all_groups(data, 3, 3)
