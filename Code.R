@@ -487,7 +487,6 @@ star_group_looking_3_fNIRS_mean <- function(data){
                lwd.circle = 3, lwd.stars=3, cex.labels = 2, cex.cat = 2)
   title(main = "Graphische Visualisierung\n des Modellergebnisses", cex.main=2 )
 }
-star_group_looking_3_fNIRS_mean(imp_1)
 
 
 #### Kapitel: Frage 3
@@ -502,7 +501,6 @@ looking_group_3_channel <- function(data){
   mydata$group_looking_3<- as.factor(mydata$group_looking_3)
   summary(multinom(formula = group_looking_3 ~., data = mydata))
 }
-looking_group_3_channel(imp_1)
 
 
 ## Suche nach grünen Channeln
@@ -514,7 +512,6 @@ find_big_difference_side <- function(data){
                 mean((abs(looking_group_3_channel(data)$coefficient[1, ])+
                         abs(looking_group_3_channel(data)$coefficient[2, ]))[-1])))
 }
-find_big_difference_side(imp_1)
 
 
 ## Suche nach roten Channeln
