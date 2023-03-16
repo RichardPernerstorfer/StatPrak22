@@ -403,12 +403,13 @@ ggplot(melt(ndata),mapping = aes(variable, value)) +
         axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16))+ 
   geom_jitter(width = 0.15,alpha = 0.3, size = 2)
 # nach Channels
-imp2 <- add_all_groups(imp_2, 3, 3)
+imp2 <- add_all_groups(imp_1, 3, 3)
 imp2 <- imp2[,133:162]
 imp2 <- t(imp2)
 optimize_channels_wss(imp2)
 optimize_channels_silhouette(imp2)
-cluster_plot(imp2,2)
+fviz_cluster(kmeans(imp2, 2, nstart = 25), data = imp2) +
+  theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
 # nach Probanden
 optimize_cluster_wss(imp_2)
 optimize_cluster_silhouette(imp_2)
