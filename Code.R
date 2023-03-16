@@ -16,6 +16,7 @@ library(factoextra)
 library(NbClust)
 library(reshape2)
 library(EffectStars)
+library(ggolot2)
 
 ### original data setsw
 load('looking.RData')
