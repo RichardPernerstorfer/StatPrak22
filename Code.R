@@ -17,6 +17,7 @@ library(NbClust)
 library(reshape2)
 library(EffectStars)
 library(ggplot2)
+library(corrplot)
 
 ### original data setsw
 load('looking.RData')
