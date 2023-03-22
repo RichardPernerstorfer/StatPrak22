@@ -231,34 +231,35 @@ grouping_dendrogram <- function(data){
 ###Cluster Optimierungsplots
 optimize_cluster_wss <- function(data){
   grouping_data_new <- data[,2:121]
-  fviz_nbclust(grouping_data_new, kmeans, method = "wss", k.max = 40) + theme_minimal() + ggtitle("Within Sum of Square Method") +
+  fviz_nbclust(grouping_data_new, kmeans, method = "wss", k.max = 40) + theme_minimal() + ggtitle("the Elbow Method") +
    theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
 }
 optimize_cluster_silhouette <- function(data){
   grouping_data_new <- data[,2:121]
-  fviz_nbclust(grouping_data_new, kmeans, method = "silhouette", k.max = 40) + theme_minimal() + ggtitle("the Elbow Method") +
+  fviz_nbclust(grouping_data_new, kmeans, method = "silhouette", k.max = 40) + theme_minimal() + ggtitle("the Silouette Method") +
    theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
 }
 
 optimize_looking_wss <- function(data){
   grouping_data_new <- data[-c(6,17,18),122:129]
-  fviz_nbclust(grouping_data_new, kmeans, method = "wss", k.max = 40) + theme_minimal() + ggtitle("Within Sum of Square Method") +
+  fviz_nbclust(grouping_data_new, kmeans, method = "wss", k.max = 40) + theme_minimal() + ggtitle("the Elbow Method") +
    theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
 }
 optimize_looking_silhouette <- function(data){
   grouping_data_new <- data[-c(6,17,18),122:129]
-  fviz_nbclust(grouping_data_new, kmeans, method = "silhouette", k.max = 40) + theme_minimal() + ggtitle("the Elbow Method") +
-   theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
+  fviz_nbclust(grouping_data_new, kmeans, method = "silhouette", k.max = 40) + theme_minimal() + ggtitle("the Silouette Method") +
+   theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold")) +
+   scale_y_continuous(labels = scales::label_number_si())
 }
 
 optimize_channels_wss <- function(data){
   grouping_data_new <- data
-  fviz_nbclust(grouping_data_new, kmeans, method = "wss", k.max = 15) + theme_minimal() + ggtitle("Within Sum of Square Method") +
+  fviz_nbclust(grouping_data_new, kmeans, method = "wss", k.max = 15) + theme_minimal() + ggtitle("the Elbow Method") +
    theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
 }
 optimize_channels_silhouette <- function(data){
   grouping_data_new <- data
-  fviz_nbclust(grouping_data_new, kmeans, method = "silhouette", k.max = 15) + theme_minimal() + ggtitle("the Elbow Method") +
+  fviz_nbclust(grouping_data_new, kmeans, method = "silhouette", k.max = 15) + theme_minimal() + ggtitle("the Silouette Method") +
    theme(axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16), plot.title = element_text(size = 24, face = "bold"))
 }
 
